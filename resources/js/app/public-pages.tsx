@@ -72,12 +72,15 @@ function AuthShell({
 
                         <div className="mt-10 data-grid">
                             {landingHighlights.map((item) => (
-                                <SpotlightCard key={copyFor(language, item.title)} className="min-h-[190px]">
-                                    <div className="mb-4 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-[var(--primary)]/10 via-[var(--primary)]/5 to-transparent p-3 shadow-inner ring-1 ring-[var(--line)]">
+                                <SpotlightCard key={copyFor(language, item.title)} className="min-h-[190px] relative overflow-hidden group">
+                                    {/* Abstract background shape for visual interest */}
+                                    <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[var(--primary)]/10 rounded-full blur-2xl group-hover:bg-[var(--primary)]/20 transition-colors duration-500" />
+                                    
+                                    <div className="mb-4 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-[var(--primary)]/10 via-[var(--primary)]/5 to-transparent p-3 shadow-inner ring-1 ring-[var(--line)] relative z-10">
                                         <AppIcon name={item.icon} className="h-5 w-5 text-[var(--primary)]" />
                                     </div>
-                                    <h3 className="text-xl font-bold">{copyFor(language, item.title)}</h3>
-                                    <p className="body-soft mt-3 leading-7">{copyFor(language, item.description)}</p>
+                                    <h3 className="text-xl font-bold relative z-10">{copyFor(language, item.title)}</h3>
+                                    <p className="body-soft mt-3 leading-7 relative z-10">{copyFor(language, item.description)}</p>
                                 </SpotlightCard>
                             ))}
                         </div>
@@ -86,11 +89,6 @@ function AuthShell({
 
                 <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate" className="panel-strong rounded-[2rem] p-7 md:p-8">
                     {children}
-                    <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-[var(--line)] pt-6">
-                        <Badge tone="info" text={language === 'ar' ? 'ثنائي اللغة' : 'Bilingual'} />
-                        <Badge tone="success" text="Laravel Backend" />
-                        <Badge tone="warning" text="Python Inference" />
-                    </div>
                     <p className="body-muted mt-4 text-sm">
                         {boot.auth.isAuthenticated
                             ? language === 'ar'
@@ -510,10 +508,6 @@ export function RegisterPage() {
                     <InputField label={language === 'ar' ? 'كلمة المرور' : 'Password'} type="password" autoComplete="new-password" value={form.password} onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} required />
                     <InputField label={language === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm password'} type="password" autoComplete="new-password" value={form.confirmPassword} onChange={(event) => setForm((current) => ({ ...current, confirmPassword: event.target.value }))} required />
                 </div>
-                <SelectField label={language === 'ar' ? 'اللغة المفضلة' : 'Preferred language'} value={form.preferred_language} onChange={(event) => setForm((current) => ({ ...current, preferred_language: event.target.value as Language }))}>
-                    <option value="ar">{language === 'ar' ? 'العربية' : 'Arabic'}</option>
-                    <option value="en">{language === 'ar' ? 'الإنجليزية' : 'English'}</option>
-                </SelectField>
                 {error ? <div className="rounded-2xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">{error}</div> : null}
                 <button disabled={busy} className="button-primary inline-flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold disabled:opacity-60">
                     {busy ? <Sparkles className="h-4 w-4 animate-pulse" /> : <Star className="h-4 w-4" />}

@@ -28,21 +28,21 @@ export const appNav: NavItem[] = [
 
 export const landingHighlights: FeatureCard[] = [
     {
-        icon: 'brain',
+        icon: 'sparkles',
         tone: 'info',
-        title: createCopy('تعلم عميق متكامل', 'End-to-end deep learning'),
+        title: createCopy('تجربة مستخدم سلسة', 'Seamless User Experience'),
         description: createCopy(
-            'خط استدلال موحّد يربط معالجة الإطارات والخصائص البصرية بنموذج عميق لتحليل المشاعر في تدفق واحد.',
-            'A unified inference pipeline links frame processing and visual features to a deep model for emotion analysis in a single flow.',
+            'واجهة مستخدم عصرية وسريعة الاستجابة تضمن لك تجربة تحليل مريحة وفعالة على جميع الأجهزة.',
+            'A modern, responsive user interface ensuring a comfortable and efficient analysis experience across all devices.',
         ),
     },
     {
         icon: 'shield',
         tone: 'success',
-        title: createCopy('بنية تشغيلية موثوقة', 'Reliable runtime architecture'),
+        title: createCopy('أمان وخصوصية عالية', 'High Security & Privacy'),
         description: createCopy(
-            'Laravel يدير الحسابات والجلسات والسجل، وPython يشغّل النماذج العميقة وخدمات المعالجة.',
-            'Laravel handles accounts, sessions and history while Python runs the deep models and processing services.',
+            'نحن نولي أهمية قصوى لخصوصية بياناتك. يتم معالجة الصور ومقاطع الفيديو بأمان تام دون الاحتفاظ بها.',
+            'We prioritize your data privacy. Images and videos are processed with absolute security and are not retained.',
         ),
     },
 ];
