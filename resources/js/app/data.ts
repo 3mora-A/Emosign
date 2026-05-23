@@ -13,8 +13,10 @@ export const projectShortTitle: LocalizedText = createCopy(
 
 export const publicNav: NavItem[] = [
     { to: '/', label: createCopy('الرئيسية', 'Home'), icon: 'home', exact: true },
-    { to: '/upload', label: createCopy('التحليل', 'Analysis'), icon: 'sparkles' },
-    { to: '/history', label: createCopy('السجل', 'History'), icon: 'history' },
+    { to: '/#about', label: createCopy('عن النظام', 'About Us'), icon: 'sparkles' },
+    { to: '/#how-it-works', label: createCopy('آلية العمل', 'How it Works'), icon: 'settings' },
+    { to: '/#achievements', label: createCopy('الإنجازات', 'Achievements'), icon: 'history' },
+    { to: '/#team', label: createCopy('فريق العمل', 'Our Team'), icon: 'users' },
 ];
 
 export const appNav: NavItem[] = [

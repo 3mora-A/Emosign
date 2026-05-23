@@ -517,31 +517,90 @@ async function postLogout(token: string, url: string) {
 
 function PublicLinks({ items, onNavigate }: { items: NavItem[]; onNavigate?: () => void }) {
     const { language, boot } = useAppContext();
+    const location = useLocation();
     const visibleItems = useMemo(
         () => items.filter((item) => !item.adminOnly && (!boot.auth.isAuthenticated || item.to !== '/history')),
         [boot.auth.isAuthenticated, items],
     );
 
+    // Track active section based on scroll
+    const [activeHash, setActiveHash] = useState(location.hash);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.location.pathname !== '/') return;
+            
+            const scrollPosition = window.scrollY + 100; // Offset for header
+            let currentHash = '';
+
+            // Check sections
+            const sections = items.filter(item => item.to.startsWith('/#')).map(item => item.to.substring(2));
+            
+            for (const section of sections) {
+                const element = document.getElementById(section);
+                if (element && element.offsetTop <= scrollPosition && (element.offsetTop + element.offsetHeight) > scrollPosition) {
+                    currentHash = `/#${section}`;
+                    break;
+                }
+            }
+
+            if (activeHash !== currentHash) {
+                setActiveHash(currentHash);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        // Initial check
+        handleScroll();
+        
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [items, activeHash]);
+
+    // Sync with location hash changes (e.g. back button)
+    useEffect(() => {
+        if (location.hash) {
+            setActiveHash(`/${location.hash}`);
+        } else {
+            setActiveHash('');
+        }
+    }, [location.hash]);
+
     return (
         <>
-            {visibleItems.map((item) => (
-                <NavLink
-                    key={item.to}
-                    end={item.exact}
-                    to={item.to}
-                    onClick={onNavigate}
-                    className={({ isActive }) =>
-                        cx(
-                            'rounded-full px-4 py-2 text-sm font-semibold transition',
-                            isActive
-                                ? 'bg-[rgb(var(--primary-rgb)/0.16)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] ring-1 ring-[rgb(var(--primary-rgb)/0.22)]'
-                                : 'text-[var(--text-soft)] hover:bg-white/[0.06] hover:text-white',
-                        )
-                    }
-                >
-                    {copyFor(language, item.label)}
-                </NavLink>
-            ))}
+            {visibleItems.map((item) => {
+                return (
+                    <NavLink
+                        key={item.to}
+                        end={item.exact}
+                        to={item.to}
+                        onClick={(e) => {
+                            if (item.to === '/') {
+                                if (window.location.pathname === '/') {
+                                    e.preventDefault();
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    window.history.pushState(null, '', '/');
+                                    setActiveHash('');
+                                }
+                            } else if (item.to.startsWith('/#')) {
+                                if (window.location.pathname === '/') {
+                                    e.preventDefault();
+                                    const id = item.to.substring(2);
+                                    const el = document.getElementById(id);
+                                    if (el) {
+                                        el.scrollIntoView({ behavior: 'smooth' });
+                                        window.history.pushState(null, '', item.to);
+                                        setActiveHash(item.to); // Set full hash like '/#about'
+                                    }
+                                }
+                            }
+                            if (onNavigate) onNavigate();
+                        }}
+                        className="rounded-full px-4 py-2 text-sm font-semibold transition text-[var(--text-soft)] hover:bg-white/[0.06] hover:text-white"
+                    >
+                        {copyFor(language, item.label)}
+                    </NavLink>
+                );
+            })}
         </>
     );
 }

@@ -658,6 +658,24 @@ export function UploadPage() {
                 onSelectAnalysis={(analysis) => {
                     setSelectedAnalysisId(analysis.id);
                     focusQueuedFile(analysis.fileName);
+                    const viewportElement = document.getElementById('media-viewport-section');
+                    if (viewportElement) {
+                        const targetPosition = viewportElement.getBoundingClientRect().top + window.scrollY - 24;
+                        const startPosition = window.scrollY;
+                        const distance = targetPosition - startPosition;
+                        let startTime: number | null = null;
+                        const duration = 300;
+
+                        const animation = (currentTime: number) => {
+                            if (startTime === null) startTime = currentTime;
+                            const timeElapsed = currentTime - startTime;
+                            const progress = Math.min(timeElapsed / duration, 1);
+                            const ease = 1 - (1 - progress) * (1 - progress);
+                            window.scrollTo(0, startPosition + distance * ease);
+                            if (timeElapsed < duration) requestAnimationFrame(animation);
+                        };
+                        requestAnimationFrame(animation);
+                    }
                 }}
             />
         </motion.div>
@@ -784,6 +802,7 @@ function BatchResultsSection({
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
             className="space-y-6 pt-8"
         >
             <div className="flex flex-col gap-2">

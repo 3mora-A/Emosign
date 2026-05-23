@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, MoveRight, ShieldEllipsis, Sparkles, Star, WandSparkles } from 'lucide-react';
+import { Eye, EyeOff, MoveRight, ShieldEllipsis, Sparkles, Star, WandSparkles, Smile, Frown, Zap, ScanFace, Cpu, PlaySquare, Image as ImageIcon, Hand, UploadCloud, BrainCircuit, BarChart3, GraduationCap, HeartPulse, Headphones, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ import {
 import { useAppContext } from './context';
 import { landingHighlights, testimonials, whyItMatters, workflowSteps } from './data';
 import type { Language, LocalizedText } from './types';
-import { copyFor, toAppPath, toAppUrl } from './utils';
+import { copyFor, cx, toAppPath, toAppUrl } from './utils';
 
 async function submitForm(
     url: string,
@@ -106,184 +106,224 @@ function AuthShell({
     );
 }
 
+function FloatingBadge({ icon, text, delay, className }: { icon: ReactNode, text: string, delay: number, className: string }) {
+    return (
+        <motion.div
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 4, repeat: Infinity, delay, ease: "easeInOut" }}
+            className={cx("absolute flex items-center gap-3 rounded-2xl border border-white/10 bg-black/60 p-3 md:p-4 backdrop-blur-xl shadow-2xl z-20", className)}
+        >
+            {icon}
+            <span className="font-bold text-xs md:text-sm tracking-wide text-white">{text}</span>
+        </motion.div>
+    );
+}
+
 export function LandingPage() {
     const { language, boot } = useAppContext();
 
     return (
-        <div className="space-y-0">
-            <section className="section-shell">
-                <div className="app-container grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-                    <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate">
-                        <div className="eyebrow">
+        <div className="space-y-32 pb-24 overflow-hidden">
+            {/* HERO SECTION */}
+            <section className="relative pt-12 lg:pt-24">
+                {/* Background glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--primary)]/20 rounded-full blur-[120px] pointer-events-none" />
+
+                <div className="app-container grid lg:grid-cols-2 gap-16 items-center">
+                    <motion.div
+                        initial={{ opacity: 0, x: language === 'ar' ? 50 : -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="relative z-10"
+                    >
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)] text-sm font-bold mb-8">
                             <Sparkles className="h-4 w-4" />
-                            {language === 'ar' ? 'مشروع تخرّج · تعلم عميق' : 'Graduation Project · Deep Learning'}
+                            {language === 'ar' ? 'الجيل الجديد من الذكاء الاصطناعي' : 'Next-Gen AI Technology'}
                         </div>
-                        <h1 className="section-title mt-6 max-w-4xl">
-                            {language === 'ar'
-                                ? 'نظام تعلم عميق متكامل لتحليل المشاعر'
-                                : 'End-to-End Deep Learning System for Emotion Analysis'}
+
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.2] tracking-tight text-white">
+                            {language === 'ar' ? (
+                                <>نظام تعلم عميق متكامل <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]">لتحليل المشاعر</span></>
+                            ) : (
+                                <>End-to-End Deep Learning System for <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]">Emotion Analysis</span></>
+                            )}
                         </h1>
-                        <p className="body-soft mt-6 max-w-3xl text-lg leading-8">
+
+                        <p className="mt-6 text-lg text-white/60 leading-relaxed max-w-lg">
                             {language === 'ar'
-                                ? 'نظام بحثي يستقبل الفيديو أو الصورة، ويعالج الإطارات والخصائص البصرية، ثم يشغّل شبكات عصبية عميقة لتحليل المشاعر ويُخرج تقريرًا واضحًا بالحالة الشعورية ودرجة الثقة والبدائل.'
-                                : 'A research-grade system that ingests video or image input, processes frames and visual features, runs deep neural networks for emotion analysis, and produces a clear report with the emotional state, confidence, and alternatives.'}
+                                ? 'ارفع أي صورة أو فيديو، وسيقوم محرك التعلم العميق الخاص بنا بتحليل تعابير الوجه بدقة متناهية لاستخراج الحالة الشعورية فوراً.'
+                                : 'Upload any image or video, and our deep learning engine will analyze facial expressions with extreme accuracy to extract the emotional state instantly.'}
                         </p>
-                        <div className="mt-8 flex flex-wrap gap-3">
-                            <ButtonLink to={boot.auth.isAuthenticated ? '/upload' : '/register'}>
-                                {boot.auth.isAuthenticated ? (language === 'ar' ? 'افتح لوحة التحكم' : 'Open dashboard') : language === 'ar' ? 'ابدأ الآن' : 'Get started'}
-                                <MoveRight className="h-4 w-4" />
-                            </ButtonLink>
-                            <ButtonLink to="/upload" variant="secondary">
-                                {language === 'ar' ? 'استكشف مسار التحليل' : 'Explore inference flow'}
+
+                        <div className="mt-10 flex flex-wrap gap-4">
+                            <ButtonLink to={boot.auth.isAuthenticated ? '/upload' : '/register'} className="px-8 py-4 text-base rounded-full shadow-[0_0_40px_rgba(var(--primary-rgb),0.4)] hover:scale-105 transition-transform">
+                                {language === 'ar' ? 'ابدأ التحليل مجاناً' : 'Start Analyzing Free'}
+                                <MoveRight className="h-5 w-5 rtl:rotate-180" />
                             </ButtonLink>
                         </div>
                     </motion.div>
 
-                    <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate">
-                        <SpotlightCard noHover className="relative flex flex-col justify-center overflow-hidden !p-0 shadow-[0_24px_80px_-16px_rgba(0,0,0,0.45)] min-h-[22rem]">
-                            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_-10%,rgb(var(--primary-rgb)/0.12),transparent_52%)]" />
-                            <div className="relative z-[1] p-6 sm:p-8 xl:p-10">
-                                <div className="eyebrow">{language === 'ar' ? 'مكوّنات النظام' : 'System overview'}</div>
-                                <h3 className="mt-5 text-3xl font-extrabold sm:text-4xl">
-                                    {language === 'ar' ? 'مسار تحليل متكامل من الإدخال حتى التقرير النهائي' : 'A complete inference pipeline from input to final report'}
-                                </h3>
-                                <div className="mt-8 grid gap-4">
-                                {workflowSteps.slice(0, 3).map((step) => (
-                                    <div key={copyFor(language, step.title)} className="group flex items-start gap-4 rounded-2xl border border-white/[0.04] bg-white/[0.02] p-4 transition hover:border-[rgb(var(--primary-rgb)/0.2)] hover:bg-white/[0.04]">
-                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[var(--primary)] transition group-hover:scale-105 group-hover:bg-[rgb(var(--primary-rgb)/0.1)]">
-                                            <AppIcon name={step.icon} className="h-5 w-5" />
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold">{copyFor(language, step.title)}</p>
-                                            <p className="body-soft mt-1 text-sm">{copyFor(language, step.description)}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                                </div>
-                            </div>
-                        </SpotlightCard>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1, delay: 0.2 }}
+                        className="relative h-[400px] sm:h-[500px] lg:h-[600px] w-full z-10 mt-10 lg:mt-0"
+                    >
+                        <div className="absolute inset-0 rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
+                            <img src="/images/hero-face.png" alt="AI Face Analysis" className="w-full h-full object-cover opacity-70" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
+                            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+                        </div>
+
+                        {/* Floating Elements */}
+                        <FloatingBadge icon={<Smile className="text-emerald-400 h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? 'سعيد 98%' : 'Happy 98%'} delay={0} className="top-12 -left-4 md:-left-8 lg:-left-12" />
+                        <FloatingBadge icon={<Frown className="text-blue-400 h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? 'حزين 12%' : 'Sad 12%'} delay={1.5} className="bottom-24 -right-4 md:-right-8 lg:-right-12" />
+                        <FloatingBadge icon={<Zap className="text-amber-400 h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? '0.2ث استجابة' : '0.2s Latency'} delay={0.7} className="top-1/2 -left-8 md:-left-12 lg:-left-16" />
+                        <FloatingBadge icon={<ScanFace className="text-[var(--primary)] h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? 'تحليل الوجوه' : 'Face Scan'} delay={2.2} className="top-1/4 -right-4 md:-right-6 lg:-right-10" />
                     </motion.div>
                 </div>
             </section>
 
-            <section className="section-shell">
-                <div className="app-container">
-                    <SectionHeading
-                        eyebrow={language === 'ar' ? 'مكوّنات النظام' : 'System Components'}
-                        title={language === 'ar' ? 'بنية موحّدة للتعلم العميق' : 'A unified architecture for deep learning'}
-                        description={language === 'ar' ? 'تم بناء النظام كحلقات مترابطة: استقبال البيانات، استخراج المعالم، التحليل العميق، ثم عرض النتائج، مع فصل واضح بين Laravel كخدمة تطبيق وPython كخدمة تحليل.' : 'The system is built as connected stages: data ingestion, landmark extraction, deep inference, then result presentation, with a clear separation between Laravel (application service) and Python (inference service).'}
-                        align="center"
-                    />
-                    <div className="mt-12 data-grid">
-                        {landingHighlights.map((item) => (
-                            <SpotlightCard key={copyFor(language, item.title)} className="min-h-[220px]">
-                                <div className="flex items-center justify-between gap-4">
-                                    <div className="inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-white/[0.08] via-white/[0.02] to-transparent p-3 shadow-inner ring-1 ring-white/[0.04]">
-                                        <AppIcon name={item.icon} className="h-5 w-5 text-[var(--primary)]" />
-                                    </div>
-                                    <Badge tone={item.tone} text={item.tone.toUpperCase()} />
-                                </div>
-                                <h3 className="mt-6 text-2xl font-bold">{copyFor(language, item.title)}</h3>
-                                <p className="body-soft mt-4 leading-8">{copyFor(language, item.description)}</p>
-                            </SpotlightCard>
-                        ))}
-                    </div>
+            {/* ABOUT US - BENTO GRID */}
+            <section id="about" className="app-container scroll-mt-32">
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">{language === 'ar' ? 'عن النظام' : 'About The System'}</h2>
+                    <p className="text-white/50 text-lg max-w-2xl mx-auto">{language === 'ar' ? 'بنية تحتية متطورة تجمع بين سرعة الأداء ودقة الذكاء الاصطناعي' : 'Advanced infrastructure combining high-speed performance with AI accuracy'}</p>
                 </div>
-            </section>
 
-            <section className="section-shell">
-                <div className="app-container">
-                    <SectionHeading
-                        eyebrow={language === 'ar' ? 'كيف يعمل النظام' : 'How It Works'}
-                        title={language === 'ar' ? 'مسار تحليل متكامل من الإطارات إلى تقرير المخرجات' : 'An end-to-end inference pipeline from frames to the output report'}
-                        description={language === 'ar' ? 'كل مرحلة في مسار المعالجة موثّقة ومرئية للمستخدم: من استقبال البيانات، إلى استخراج المعالم، فالشبكة العصبية، وحتى إخراج التقرير النهائي.' : 'Every stage of the pipeline is documented and visible to the user: from data ingestion to landmark extraction, the neural network, and the final output report.'}
-                    />
-                    <div className="mt-12 grid gap-4 lg:grid-cols-4">
-                        {workflowSteps.map((step, index) => (
-                            <SpotlightCard key={copyFor(language, step.title)} className="min-h-[250px]">
-                                <div className="flex items-center justify-between">
-                                    <div className="mb-6 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-white/[0.08] via-white/[0.02] to-transparent p-3 shadow-inner ring-1 ring-white/[0.04]">
-                                        <AppIcon name={step.icon} className="h-5 w-5 text-[var(--primary)]" />
-                                    </div>
-                                    <span className="text-sm font-bold text-[rgb(var(--primary-rgb)/0.75)]">0{index + 1}</span>
-                                </div>
-                                <h3 className="text-xl font-bold">{copyFor(language, step.title)}</h3>
-                                <p className="body-soft mt-3 leading-8">{copyFor(language, step.description)}</p>
-                            </SpotlightCard>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <section className="section-shell">
-                <div className="app-container">
-                    <SectionHeading
-                        eyebrow={language === 'ar' ? 'أهمية المشروع' : 'Why It Matters'}
-                        title={language === 'ar' ? 'بحث تطبيقي يخدم الشمولية والوصول الرقمي للصمّ وضعاف السمع' : 'Applied research serving digital inclusion and accessibility for deaf and hard-of-hearing users'}
-                        description={language === 'ar' ? 'الهدف هو نقل أبحاث التعلم العميق من المختبر إلى أداة عملية تساعد في فهم الحالة الشعورية في المقاطع المرئية بطريقة قابلة للقياس.' : 'The goal is to bring deep learning research out of the lab and into a practical tool that helps interpret emotional state in visual samples in a measurable way.'}
-                    />
-                    <div className="mt-12 data-grid">
-                        {whyItMatters.map((item) => (
-                            <SpotlightCard key={copyFor(language, item.title)} className="min-h-[220px]">
-                                <div className="mb-6 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-white/[0.08] via-white/[0.02] to-transparent p-3 shadow-inner ring-1 ring-white/[0.04]">
-                                    <AppIcon name={item.icon} className="h-5 w-5 text-[var(--primary)]" />
-                                </div>
-                                <h3 className="text-xl font-bold">{copyFor(language, item.title)}</h3>
-                                <p className="body-soft mt-3 leading-8">{copyFor(language, item.description)}</p>
-                            </SpotlightCard>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <section className="section-shell">
-                <div className="app-container">
-                    <SectionHeading
-                        eyebrow={language === 'ar' ? 'مرجعيات' : 'References'}
-                        title={language === 'ar' ? 'مساحة لاحقة لإضافة أبحاث ومراجع علمية تدعم النظام' : 'A space to later add scientific research and references supporting the system'}
-                        description={language === 'ar' ? 'يمكن لاحقًا استبدال هذا القسم باقتباسات من أبحاث في رؤية الحاسوب وتصنيف المشاعر التي بُني عليها التصميم.' : 'This section can later be replaced with citations from computer vision and emotion classification research underpinning the design.'}
-                    />
-                    <div className="mt-12 grid gap-4 lg:grid-cols-2">
-                        {testimonials.map((item) => (
-                            <SpotlightCard key={item.name} className="min-h-[220px]">
-                                <Star className="h-5 w-5 text-amber-300" />
-                                <p className="mt-6 text-lg font-semibold leading-9">“{copyFor(language, item.quote)}”</p>
-                                <div className="mt-8">
-                                    <p className="font-bold">{item.name}</p>
-                                    <p className="body-soft mt-1 text-sm">{copyFor(language, item.role)}</p>
-                                </div>
-                            </SpotlightCard>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <section className="section-shell pt-0">
-                <div className="app-container">
-                    <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate" className="panel-strong relative overflow-hidden rounded-[2.4rem] p-8 md:p-10">
-                        <div className="hero-mesh" />
-                        <div className="relative z-10 max-w-3xl">
-                            <div className="eyebrow">
-                                <WandSparkles className="h-4 w-4" />
-                                {language === 'ar' ? 'جاهز للاستخدام والتوسعة' : 'Ready to use and extend'}
-                            </div>
-                            <h2 className="section-title mt-6">{language === 'ar' ? 'ابدأ تجربة النظام عمليًا من رفع العينة وحتى تقرير التحليل' : 'Try the system end-to-end from sample upload to the inference report'}</h2>
-                            <p className="body-soft mt-6 text-lg leading-8">
-                                {language === 'ar'
-                                    ? 'سجّل الدخول، توجّه إلى لوحة التحكم، ارفع عينة فيديو أو صورة، ثم استعرض النتائج والسجل التاريخي للتحليلات السابقة.'
-                                    : 'Sign in, head to the dashboard, upload a video or image sample, then review the results and the historical log of previous analyses.'}
-                            </p>
-                            <div className="mt-8 flex flex-wrap gap-3">
-                                <ButtonLink to={boot.auth.isAuthenticated ? '/upload' : '/login'}>
-                                    {boot.auth.isAuthenticated ? (language === 'ar' ? 'افتح لوحة التحكم' : 'Open dashboard') : language === 'ar' ? 'تسجيل الدخول' : 'Sign in'}
-                                </ButtonLink>
-                                <ButtonLink to="/upload" variant="secondary">
-                                    {language === 'ar' ? 'بدء عملية التصنيف' : 'Try inference'}
-                                </ButtonLink>
-                            </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
+                    {/* Large Card */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                        className="md:col-span-2 md:row-span-2 relative rounded-[2.5rem] overflow-hidden group"
+                    >
+                        <img src="/images/sign-language-ai.png" alt="Sign Language AI Tracking" className="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-105" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                        <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
+                            <h3 className="text-3xl md:text-4xl font-black text-white mb-4">{language === 'ar' ? 'تحليل متقدم لتعابير الوجه' : 'Advanced Facial Expression Analysis'}</h3>
+                            <p className="text-white/80 text-lg max-w-md leading-relaxed">{language === 'ar' ? 'يقوم نظامنا برصد وتحليل أدق التغيرات في ملامح الوجه في الوقت الفعلي، مما يتيح فهماً عميقاً ودقيقاً للحالة الشعورية للمستخدم في أجزاء من الثانية.' : 'Our system detects and analyzes the subtlest changes in facial features in real-time, enabling a deep and accurate understanding of the user\'s emotional state in milliseconds.'}</p>
                         </div>
                     </motion.div>
+
+                    {/* Small Card 1 */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+                        className="relative rounded-[2.5rem] overflow-hidden bg-white/5 border border-white/10 p-8 flex flex-col justify-center items-center text-center group hover:bg-white/10 transition-colors"
+                    >
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgb(var(--primary-rgb)/0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <ScanFace className="h-16 w-16 text-white mb-6" />
+                        <h3 className="text-2xl font-bold text-white mb-2">{language === 'ar' ? 'دقة عالية' : 'High Accuracy'}</h3>
+                        <p className="text-white/50">{language === 'ar' ? 'نماذج مدربة على ملايين الصور لضمان دقة لا مثيل لها.' : 'Models trained on millions of images to ensure unmatched precision.'}</p>
+                    </motion.div>
+
+                    {/* Small Card 2 */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }}
+                        className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[var(--primary)]/20 to-transparent border border-[var(--primary)]/30 p-8 flex flex-col justify-center items-center text-center group"
+                    >
+                        <div className="flex gap-4 mb-6">
+                            <PlaySquare className="h-12 w-12 text-white/80" />
+                            <ImageIcon className="h-12 w-12 text-white/80" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-white mb-2">{language === 'ar' ? 'دعم شامل' : 'Universal Support'}</h3>
+                        <p className="text-white/70">{language === 'ar' ? 'نحلل الصور الثابتة ومقاطع الفيديو بنفس الكفاءة.' : 'We analyze static images and video clips with the same efficiency.'}</p>
+                    </motion.div>
                 </div>
+            </section>
+
+            {/* HOW IT WORKS */}
+            <section id="how-it-works" className="app-container scroll-mt-32">
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">{language === 'ar' ? 'كيف يعمل النظام؟' : 'How It Works?'}</h2>
+                    <p className="text-white/50 text-lg max-w-2xl mx-auto">{language === 'ar' ? 'ثلاث خطوات بسيطة تفصلك عن تحليل المشاعر بدقة' : 'Three simple steps to accurate emotion analysis'}</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                    {/* Connecting Line */}
+                    <div className="hidden md:block absolute top-1/2 left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-transparent via-[var(--primary)]/50 to-transparent -translate-y-1/2 z-0" />
+                    
+                    {[
+                        { icon: UploadCloud, titleAr: '1. رفع العينة', titleEn: '1. Upload Sample', descAr: 'قم برفع صورة أو مقطع فيديو من جهازك.', descEn: 'Upload an image or video from your device.' },
+                        { icon: BrainCircuit, titleAr: '2. تحليل الذكاء الاصطناعي', titleEn: '2. AI Analysis', descAr: 'يقوم النظام بمعالجة الإطارات واستخراج المشاعر في أجزاء من الثانية.', descEn: 'The system processes frames and extracts emotions in milliseconds.' },
+                        { icon: BarChart3, titleAr: '3. عرض النتائج', titleEn: '3. View Results', descAr: 'احصل على تقرير مفصل يوضح الحالة الشعورية ونسبة الدقة.', descEn: 'Get a detailed report showing the emotional state and accuracy.' }
+                    ].map((step, i) => (
+                        <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2 }} className="relative z-10 flex flex-col items-center text-center bg-black/40 backdrop-blur-sm border border-white/5 rounded-3xl p-8 hover:bg-white/5 transition-colors">
+                            <div className="h-20 w-20 rounded-full bg-[var(--primary)]/20 border border-[var(--primary)]/30 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)]">
+                                <step.icon className="h-10 w-10 text-[var(--primary)]" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-white mb-3">{language === 'ar' ? step.titleAr : step.titleEn}</h3>
+                            <p className="text-white/60">{language === 'ar' ? step.descAr : step.descEn}</p>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ACHIEVEMENTS */}
+            <section id="achievements" className="app-container scroll-mt-32">
+                <div className="relative rounded-[3rem] overflow-hidden bg-black border border-white/10 py-20 px-8 md:px-16 text-center">
+                    <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1000&auto=format&fit=crop')" }} />
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                    
+                    <div className="relative z-10">
+                        <h2 className="text-4xl md:text-5xl font-black text-white mb-16">{language === 'ar' ? 'أرقام تتحدث عن نفسها' : 'Numbers That Speak'}</h2>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 divide-y md:divide-y-0 md:divide-x divide-white/10 rtl:divide-x-reverse">
+                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} className="flex flex-col items-center justify-center pt-6 md:pt-0">
+                                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-4">85%</div>
+                                <p className="text-xl text-[var(--primary)] font-bold mb-2">{language === 'ar' ? 'دقة التعرف' : 'Recognition Accuracy'}</p>
+                                <p className="text-white/50 text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط الدقة في ظروف الإضاءة الطبيعية' : 'Average accuracy in natural lighting conditions'}</p>
+                            </motion.div>
+                            
+                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
+                                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-4">0.5s</div>
+                                <p className="text-xl text-[var(--primary)] font-bold mb-2">{language === 'ar' ? 'سرعة الاستجابة' : 'Response Time'}</p>
+                                <p className="text-white/50 text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط زمن المعالجة للطلب الواحد' : 'Average processing time per request'}</p>
+                            </motion.div>
+
+                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
+                                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-4">500+</div>
+                                <p className="text-xl text-[var(--primary)] font-bold mb-2">{language === 'ar' ? 'عينة اختبار' : 'Test Samples'}</p>
+                                <p className="text-white/50 text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'تم اختبارها بنجاح على النظام' : 'Successfully tested on the system'}</p>
+                            </motion.div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* OUR TEAM */}
+            <section id="team" className="app-container scroll-mt-32">
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">{language === 'ar' ? 'فريق العمل' : 'Our Team'}</h2>
+                    <p className="text-white/50 text-lg max-w-2xl mx-auto">{language === 'ar' ? 'المطورون والباحثون خلف هذا النظام' : 'The developers and researchers behind this system'}</p>
+                </div>
+                <div className="flex flex-wrap justify-center gap-10">
+                    {[
+                        { name: 'الطالب الأول', roleAr: 'مطور ذكاء اصطناعي', roleEn: 'AI Developer', img: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=500&auto=format&fit=crop' },
+                        { name: 'الطالب الثاني', roleAr: 'مطور واجهات', roleEn: 'Frontend Developer', img: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=500&auto=format&fit=crop' },
+                        { name: 'الدكتور المشرف', roleAr: 'المشرف الأكاديمي', roleEn: 'Academic Supervisor', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=500&auto=format&fit=crop' }
+                    ].map((member, i) => (
+                        <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2 }} className="flex flex-col items-center text-center group">
+                            <div className="relative w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-white/10 group-hover:border-[var(--primary)]/50 transition-colors duration-300">
+                                <img src={member.img} alt={member.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
+                            <p className="text-[var(--primary)] text-sm">{language === 'ar' ? member.roleAr : member.roleEn}</p>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
+            {/* CTA */}
+            <section className="app-container text-center pb-10">
+                <motion.div 
+                    initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                    className="inline-flex flex-col items-center"
+                >
+                    <h2 className="text-3xl md:text-5xl font-black text-white mb-8">{language === 'ar' ? 'هل أنت مستعد للتجربة؟' : 'Ready to experience it?'}</h2>
+                    <ButtonLink to={boot.auth.isAuthenticated ? '/upload' : '/register'} className="px-10 py-5 text-xl rounded-full shadow-[0_0_60px_rgba(var(--primary-rgb),0.3)] hover:scale-110 transition-transform duration-300">
+                        <WandSparkles className="h-6 w-6 ltr:mr-2 rtl:ml-2" />
+                        {language === 'ar' ? 'ابدأ التحليل الآن' : 'Start Analyzing Now'}
+                    </ButtonLink>
+                </motion.div>
             </section>
         </div>
     );
