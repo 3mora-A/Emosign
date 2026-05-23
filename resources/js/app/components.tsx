@@ -409,25 +409,25 @@ export function ProgressTimeline({
     complete?: boolean;
 }) {
     return (
-        <div className="space-y-4">
+        <div className="space-y-3">
             {steps.map((step, index) => {
                 const done = complete || index < activeIndex;
                 const current = !complete && index === activeIndex;
 
                 return (
-                    <div key={step.label} className="panel-soft flex items-start gap-4 rounded-2xl p-4">
-                        <div className={cx('mt-0.5 rounded-full p-2', done ? 'bg-[rgb(var(--primary-rgb)/0.18)] text-[var(--primary)]' : current ? 'bg-[rgb(var(--secondary-rgb)/0.18)] text-[var(--secondary)]' : 'bg-white/5 text-[var(--text-muted)]')}>
+                    <div key={step.label} className="panel-soft flex items-start gap-3 rounded-xl p-3">
+                        <div className={cx('mt-0.5 rounded-full p-1.5', done ? 'bg-[rgb(var(--primary-rgb)/0.18)] text-[var(--primary)]' : current ? 'bg-[rgb(var(--secondary-rgb)/0.18)] text-[var(--secondary)]' : 'bg-white/5 text-[var(--text-muted)]')}>
                             {done ? (
-                                <CheckCircle2 className="h-4 w-4" />
+                                <CheckCircle2 className="h-3.5 w-3.5" />
                             ) : current ? (
-                                <LoaderCircle className="h-4 w-4 animate-spin" />
+                                <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
                             ) : (
-                                <CircleDashed className="h-4 w-4" />
+                                <CircleDashed className="h-3.5 w-3.5" />
                             )}
                         </div>
-                        <div className="space-y-1">
-                            <p className="font-semibold">{step.label}</p>
-                            <p className="body-soft text-sm">{step.description}</p>
+                        <div className="space-y-0.5">
+                            <p className="text-sm font-semibold">{step.label}</p>
+                            <p className="body-soft text-xs">{step.description}</p>
                         </div>
                     </div>
                 );
