@@ -46,7 +46,9 @@ import {
 import { useAppContext } from './context';
 import { quickActions, settingsLabels } from './data';
 import { copyFor, cx, formatDate, formatNumber, formatPercent } from './utils';
-import { ResultsSection } from './analysis-pages';
+import { ResultsSection, MediaPreviewViewport, EmptyPreviewPlaceholder } from './analysis-pages';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Image as ImageIcon, Play, Video } from 'lucide-react';
 
 /* ─────────────────────────────────────────────────────────────
  *  Small layout primitives (kept local so we don't touch components.tsx)
@@ -417,7 +419,11 @@ export function HistoryPage() {
     const deferredQuery = useDeferredValue(query);
     const [status, setStatus] = useState<HistoryStatus>('all');
     const [sort, setSort] = useState<HistorySort>('newest');
-    const [expandedId, setExpandedId] = useState<string | number | null>(null);
+    const [selectedAnalysisId, setSelectedAnalysisId] = useState<string | number | null>(null);
+
+    const selectedAnalysis = useMemo(() => {
+        return history.find((h) => h.id === selectedAnalysisId) || null;
+    }, [history, selectedAnalysisId]);
 
     const counts = useMemo(
         () => ({
@@ -471,70 +477,6 @@ export function HistoryPage() {
             />
 
             <div className="flex flex-col gap-5">
-                {/* Search & Filter Bar */}
-                <div className="panel-soft flex flex-col gap-5 rounded-[2rem] p-5 lg:flex-row lg:items-center lg:justify-between border border-white/[0.04]">
-                    <div className="flex flex-wrap items-center gap-2">
-                        {tabs.map((tab) => {
-                            const active = status === tab.value;
-                            return (
-                                <button
-                                    key={tab.value}
-                                    type="button"
-                                    onClick={() => setStatus(tab.value)}
-                                    className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                                        active
-                                            ? 'border-[var(--primary)]/50 bg-[var(--primary)]/15 text-[var(--primary)]'
-                                            : 'border-white/10 bg-white/5 text-[var(--text-muted)] hover:text-[var(--text)]'
-                                    }`}
-                                >
-                                    {language === 'ar' ? tab.labelAr : tab.labelEn}
-                                    <span
-                                        className={`rounded-full px-2 py-0.5 text-xs ${
-                                            active
-                                                ? 'bg-[var(--primary)]/20'
-                                                : 'bg-white/10'
-                                        }`}
-                                    >
-                                        {formatNumber(language, counts[tab.value])}
-                                    </span>
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <div className="relative w-full sm:w-64 lg:w-72">
-                            <Search className="pointer-events-none absolute inset-y-0 top-0 my-auto h-4 w-4 text-[var(--text-muted)] ltr:left-4 rtl:right-4" />
-                            <input
-                                className="input-shell w-full ltr:pl-11 rtl:pr-11"
-                                placeholder={
-                                    language === 'ar'
-                                        ? 'ابحث باسم الملف أو الحالة الشعورية...'
-                                        : 'Search by file or emotional state...'
-                                }
-                                value={query}
-                                onChange={(event) => setQuery(event.target.value)}
-                            />
-                        </div>
-                        <div className="w-full sm:w-48">
-                            <SelectField
-                                value={sort}
-                                onChange={(event) => setSort(event.target.value as HistorySort)}
-                            >
-                                <option value="newest">
-                                    {language === 'ar' ? 'الأحدث أولاً' : 'Newest first'}
-                                </option>
-                                <option value="oldest">
-                                    {language === 'ar' ? 'الأقدم أولاً' : 'Oldest first'}
-                                </option>
-                                <option value="confidence">
-                                    {language === 'ar' ? 'الأعلى ثقة' : 'Highest confidence'}
-                                </option>
-                            </SelectField>
-                        </div>
-                    </div>
-                </div>
-
                 <div className="flex items-center justify-between px-2 text-sm text-[var(--text-muted)]">
                     <span className="inline-flex items-center gap-1.5 font-medium">
                         <Filter className="h-4 w-4" />
@@ -542,93 +484,168 @@ export function HistoryPage() {
                             ? `${formatNumber(language, items.length)} نتيجة`
                             : `${formatNumber(language, items.length)} result${items.length === 1 ? '' : 's'}`}
                     </span>
-                    {(query || status !== 'all') && (
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setQuery('');
-                                setStatus('all');
-                            }}
-                            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-medium hover:bg-white/5 transition"
-                        >
-                            <RotateCcw className="h-3.5 w-3.5" />
-                            {language === 'ar' ? 'مسح الفلاتر' : 'Clear filters'}
-                        </button>
-                    )}
                 </div>
 
-                {/* Results List */}
-                <div className="mt-2 space-y-4">
+                {/* Results Grid */}
+                <div className="mt-2">
                     {items.length ? (
-                        items.map((entry) => (
-                            <SpotlightCard
-                                key={entry.id}
-                                noHover
-                                className="group transition-all duration-300"
-                            >
-                                <div className="flex flex-col gap-6 p-1 lg:flex-row lg:items-center lg:justify-between">
-                                    <div className="flex min-w-0 flex-1 items-start gap-5">
-                                        <div className="shrink-0 mt-1 transition-transform duration-300 group-hover:scale-105">
-                                            <ConfidenceRing value={entry.confidence} />
-                                        </div>
-                                        <div className="min-w-0 flex-1">
-                                            <div className="flex flex-wrap items-center gap-3">
-                                                <h3 className="truncate text-xl font-extrabold text-white">
-                                                    {copyFor(language, entry.emotionLabel)}
-                                                </h3>
-                                                <Badge
-                                                    tone={entry.status === 'processed' ? 'success' : 'error'}
-                                                    text={
-                                                        entry.status === 'processed'
-                                                            ? language === 'ar'
-                                                                ? 'مكتمل'
-                                                                : 'Processed'
-                                                            : language === 'ar'
-                                                              ? 'فشل'
-                                                              : 'Failed'
-                                                    }
-                                                />
-                                            </div>
-                                            <p className="body-soft mt-2.5 truncate text-[0.95rem] leading-relaxed">
-                                                {copyFor(language, entry.summary)}
-                                            </p>
-                                            <div className="mt-3.5 flex flex-wrap items-center gap-3 font-medium text-xs text-[var(--text-muted)]">
-                                                <span className="inline-flex items-center gap-1.5 rounded-md bg-white/[0.03] px-2 py-1 border border-white/[0.02]">
-                                                    <Clock className="h-3.5 w-3.5" />
-                                                    {formatDate(language, entry.createdAt)}
-                                                </span>
-                                                <span className="inline-flex items-center gap-1.5 rounded-md bg-white/[0.03] px-2 py-1 border border-white/[0.02] max-w-[200px] sm:max-w-xs">
-                                                    <span className="truncate">{entry.fileName}</span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="shrink-0 lg:ms-6">
-                                        <button
-                                            type="button"
-                                            className={cx(
-                                                "flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-3.5 text-sm font-bold transition-all duration-300 lg:w-auto shadow-sm",
-                                                expandedId === entry.id
-                                                    ? "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--primary)]/20"
-                                                    : "button-secondary"
-                                            )}
-                                            onClick={() => {
-                                                setExpandedId(expandedId === entry.id ? null : entry.id);
-                                            }}
+                        <>
+                            <div id="history-viewport-section">
+                                <AnimatePresence mode="wait">
+                                    {selectedAnalysis && selectedAnalysis.status === 'processed' && (
+                                        <motion.div 
+                                            key="viewport"
+                                            initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                                            animate={{ opacity: 1, height: 'auto', marginBottom: 24 }}
+                                            exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                                            transition={{ duration: 0.15 }} // Faster fade transition
+                                            className="overflow-hidden"
                                         >
-                                            {expandedId === entry.id ? (language === 'ar' ? 'إغلاق النتيجة' : 'Close result') : (language === 'ar' ? 'فتح النتيجة' : 'Open result')}
-                                            <ArrowRight className={cx("h-4 w-4 transition-transform duration-300", expandedId === entry.id ? "rotate-90" : "rtl:rotate-180")} />
-                                        </button>
-                                    </div>
-                                </div>
+                                            <SpotlightCard noHover className="relative flex min-h-0 flex-col overflow-hidden !p-0 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.05]">
+                                                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgb(var(--secondary-rgb)/0.15),transparent_50%)]" />
+                                                
+                                                <div className="relative flex flex-1 flex-col p-4 sm:p-5">
+                                                    {selectedAnalysis.previewUrl ? (
+                                                        <MediaPreviewViewport 
+                                                            previewUrl={selectedAnalysis.previewUrl} 
+                                                            file={new File([], selectedAnalysis.fileName, { type: selectedAnalysis.mediaType === 'image' ? 'image/jpeg' : 'video/mp4' })} 
+                                                        />
+                                                    ) : (
+                                                        <EmptyPreviewPlaceholder language={language} />
+                                                    )}
+                                                </div>
 
-                                {expandedId === entry.id && (
-                                    <div className="mt-4 border-t border-white/[0.08] p-1 pt-6 animate-in fade-in slide-in-from-top-4 duration-500">
-                                        <ResultsSection analysis={entry} showHeader={false} showHero={false} />
-                                    </div>
-                                )}
-                            </SpotlightCard>
-                        ))
+                                                <div className="border-t border-white/[0.06] bg-black/20">
+                                                    <div className="p-5 sm:p-6">
+                                                        <div className="mb-5 flex items-center justify-between">
+                                                            <h3 className="text-base font-bold text-white">
+                                                                {language === 'ar' ? 'تفاصيل النتيجة' : 'Result Details'}
+                                                            </h3>
+                                                            <Badge tone="success" text={language === 'ar' ? 'مكتمل' : 'Completed'} />
+                                                        </div>
+                                                        <div className="grid gap-3 sm:grid-cols-3 xl:items-center">
+                                                            <InsightRow label={language === 'ar' ? 'الحالة الشعورية' : 'Emotional state'} value={copyFor(language, selectedAnalysis.emotionLabel)} tone="info" />
+                                                            <InsightRow label={language === 'ar' ? 'زمن التحليل' : 'Latency'} value={`${selectedAnalysis.latencyMs} ms`} tone="warning" />
+                                                            <div className="xl:pl-3">
+                                                                {/* We can use ConfidenceBar from components or just a simple display */}
+                                                                <div className="space-y-2">
+                                                                    <div className="flex items-center justify-between text-sm">
+                                                                        <span className="body-soft">{language === 'ar' ? 'درجة الثقة' : 'Confidence'}</span>
+                                                                        <span className="font-bold text-[var(--primary)]">{selectedAnalysis.confidence.toFixed(1)}%</span>
+                                                                    </div>
+                                                                    <div className="h-2 overflow-hidden rounded-full bg-white/6">
+                                                                        <div
+                                                                            className="h-full rounded-full bg-[linear-gradient(90deg,var(--accent),var(--secondary),var(--primary))]"
+                                                                            style={{ width: `${Math.max(4, Math.min(100, selectedAnalysis.confidence))}%` }}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </SpotlightCard>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+
+                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                                <AnimatePresence>
+                                    {items.map((entry, index) => {
+                                        const active = String(selectedAnalysisId) === String(entry.id);
+                                        const isSuccess = entry.status === 'processed';
+
+                                        return (
+                                            <motion.button
+                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                transition={{ delay: index * 0.02 }}
+                                                key={entry.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    setSelectedAnalysisId(entry.id);
+                                                    const viewportElement = document.getElementById('history-viewport-section');
+                                                    if (viewportElement) {
+                                                        const targetPosition = viewportElement.getBoundingClientRect().top + window.scrollY - 24;
+                                                        const startPosition = window.scrollY;
+                                                        const distance = targetPosition - startPosition;
+                                                        let startTime: number | null = null;
+                                                        const duration = 300; // Much faster scroll (300ms)
+
+                                                        const animation = (currentTime: number) => {
+                                                            if (startTime === null) startTime = currentTime;
+                                                            const timeElapsed = currentTime - startTime;
+                                                            const progress = Math.min(timeElapsed / duration, 1);
+                                                            // Simpler, faster easing function (ease-out-quad)
+                                                            const ease = 1 - (1 - progress) * (1 - progress);
+                                                            window.scrollTo(0, startPosition + distance * ease);
+                                                            if (timeElapsed < duration) requestAnimationFrame(animation);
+                                                        };
+                                                        requestAnimationFrame(animation);
+                                                    } else {
+                                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                    }
+                                                }}
+                                                className={cx(
+                                                    'group relative flex flex-col overflow-hidden rounded-xl border p-4 text-left transition-all duration-300',
+                                                    active
+                                                        ? 'border-[rgb(var(--primary-rgb)/0.5)] bg-[rgb(var(--primary-rgb)/0.1)] shadow-[0_8px_24px_rgba(var(--primary-rgb),0.15)] scale-[1.02] ring-1 ring-[rgb(var(--primary-rgb)/0.4)]'
+                                                        : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04] hover:-translate-y-1 hover:shadow-lg',
+                                                )}
+                                            >
+                                                {active && (
+                                                    <div className="absolute inset-0 bg-gradient-to-br from-[rgb(var(--primary-rgb)/0.1)] to-transparent pointer-events-none" />
+                                                )}
+                                                
+                                                <div className="relative z-10 flex w-full items-start justify-between gap-3">
+                                                    <div className={cx(
+                                                        "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors",
+                                                        active ? "border-[rgb(var(--primary-rgb)/0.4)] bg-[rgb(var(--primary-rgb)/0.2)] text-white" : "border-white/10 bg-black/40 text-white/70"
+                                                    )}>
+                                                        {entry.mediaType === 'image' ? <ImageIcon className="h-4 w-4" /> : <Video className="h-4 w-4" />}
+                                                    </div>
+                                                    <Badge
+                                                        tone={isSuccess ? 'success' : 'error'}
+                                                        text={isSuccess ? (language === 'ar' ? 'مكتمل' : 'Completed') : (language === 'ar' ? 'فشل' : 'Failed')}
+                                                    />
+                                                </div>
+
+                                                <div className="relative z-10 mt-3 min-w-0 flex-1">
+                                                    <p className={cx("truncate text-sm font-bold transition-colors", active ? "text-white" : "text-white/90")} title={entry.fileName}>{entry.fileName}</p>
+                                                    <p className="body-soft mt-1 line-clamp-2 text-xs leading-relaxed text-white/60">
+                                                        {copyFor(language, entry.summary)}
+                                                    </p>
+                                                </div>
+
+                                                <div className="relative z-10 mt-4 flex w-full items-center justify-between border-t border-white/10 pt-3">
+                                                    <div className="flex items-center gap-2.5 text-[10px] font-medium text-white/50">
+                                                        <div className="flex items-center gap-1">
+                                                            <Sparkles className={cx("h-3 w-3", active ? "text-[var(--primary)]" : "text-white/40")} />
+                                                            <span className={cx(isSuccess ? "text-white" : "")}>{entry.confidence.toFixed(1)}%</span>
+                                                        </div>
+                                                        <div className="h-1 w-1 rounded-full bg-white/20" />
+                                                        <div className="flex items-center gap-1">
+                                                            <span>{entry.latencyMs} ms</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className={cx(
+                                                        "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[10px] font-bold transition-colors",
+                                                        active 
+                                                            ? "bg-[rgb(var(--primary-rgb)/0.2)] text-[var(--primary)]" 
+                                                            : "bg-white/10 text-white/80 group-hover:bg-white/20 group-hover:text-white"
+                                                    )}>
+                                                        <Play className="h-2.5 w-2.5 fill-current" />
+                                                        <span>{language === 'ar' ? 'عرض' : 'View'}</span>
+                                                    </div>
+                                                </div>
+                                            </motion.button>
+                                        );
+                                    })}
+                                </AnimatePresence>
+                            </div>
+                        </>
                     ) : (
                         <SpotlightCard noHover>
                             <EmptyState

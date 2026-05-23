@@ -658,10 +658,6 @@ export function UploadPage() {
                 onSelectAnalysis={(analysis) => {
                     setSelectedAnalysisId(analysis.id);
                     focusQueuedFile(analysis.fileName);
-                    const viewportElement = document.getElementById('media-viewport-section');
-                    if (viewportElement) {
-                        viewportElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
                 }}
             />
         </motion.div>
@@ -697,57 +693,65 @@ function InferenceStepHeader({
     );
 }
 
-function MediaPreviewViewport({ previewUrl, file }: { previewUrl: string; file: File }) {
+export function MediaPreviewViewport({ previewUrl, file }: { previewUrl: string; file: File }) {
     const isImage = file.type.startsWith('image');
 
     return (
-        <div className="relative flex w-full items-center justify-center overflow-hidden rounded-xl bg-black/20">
-            {isImage ? (
-                <motion.img
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4 }}
-                    src={previewUrl}
-                    alt={file.name}
-                    loading="lazy"
-                    draggable={false}
-                    className="block max-h-[55vh] w-full object-contain"
-                />
-            ) : (
-                <motion.video
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4 }}
-                    src={previewUrl}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    className="block max-h-[55vh] w-full object-contain outline-none rounded-xl"
-                />
-            )}
+        <div className="relative flex w-full min-h-[16rem] items-center justify-center overflow-hidden rounded-xl bg-black/20">
+            <AnimatePresence mode="wait">
+                {isImage ? (
+                    <motion.img
+                        key={previewUrl}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.3 }}
+                        src={previewUrl}
+                        alt={file.name}
+                        loading="lazy"
+                        draggable={false}
+                        className="block max-h-[55vh] w-full object-contain"
+                    />
+                ) : (
+                    <motion.video
+                        key={previewUrl}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        src={previewUrl}
+                        controls
+                        autoPlay
+                        loop
+                        playsInline
+                        preload="metadata"
+                        className="block max-h-[55vh] w-full object-contain outline-none rounded-xl"
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }
 
-function EmptyPreviewPlaceholder({ language }: { language: 'ar' | 'en' }) {
+export function EmptyPreviewPlaceholder({ language }: { language: 'ar' | 'en' }) {
     return (
         <div className="relative z-[1] flex min-h-[16rem] flex-1 flex-col">
-            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-dashed border-white/10 bg-white/[0.01] shadow-inner">
-                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:24px_24px]" />
+            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border-2 border-dashed border-white/20 bg-black/40 shadow-inner">
+                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:24px_24px] opacity-50" />
                 
-                <div className="relative flex flex-1 flex-col items-center justify-center px-6 py-10 text-center">
+                <div className="relative flex flex-1 flex-col items-center justify-center px-6 py-10 text-center z-10">
                     <motion.div 
-                        animate={{ y: [0, -8, 0] }}
+                        animate={{ y: [0, -5, 0] }}
                         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                        className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent shadow-lg backdrop-blur-sm"
+                        className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-[rgb(var(--primary-rgb)/0.3)] bg-gradient-to-br from-[rgb(var(--primary-rgb)/0.2)] to-white/[0.05] shadow-lg backdrop-blur-md"
                     >
-                        <ImageIcon className="h-8 w-8 text-white/40" strokeWidth={1.5} />
+                        <ImageIcon className="h-8 w-8 text-[var(--primary)]" strokeWidth={1.5} />
                     </motion.div>
                     
-                    <h3 className="mt-6 max-w-md text-lg font-bold tracking-tight text-white/80">
+                    <h3 className="mt-2 max-w-md text-lg font-extrabold tracking-tight text-white">
                         {language === 'ar' ? 'مساحة العرض فارغة' : 'Viewport is empty'}
                     </h3>
-                    <p className="body-soft mt-2 max-w-sm text-sm leading-relaxed text-white/50">
+                    <p className="body-soft mt-2 max-w-sm text-xs leading-relaxed text-white/60">
                         {language === 'ar'
                             ? 'بمجرد اختيارك للملفات، ستظهر معاينة الملف المحدد هنا.'
                             : 'Once you select files, the preview of the active file will appear here.'}
@@ -809,11 +813,15 @@ function BatchResultsSection({
                                 type="button"
                                 onClick={() => {
                                     onSelectAnalysis(analysis);
+                                    const viewportElement = document.getElementById('media-viewport-section');
+                                    if (viewportElement) {
+                                        viewportElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                    }
                                 }}
                                 className={cx(
                                     'group relative flex flex-col overflow-hidden rounded-xl border p-4 text-left transition-all duration-300',
                                     active
-                                        ? 'border-[rgb(var(--primary-rgb)/0.5)] bg-[rgb(var(--primary-rgb)/0.1)] shadow-[0_8px_24px_rgba(var(--primary-rgb),0.15)] scale-[1.02]'
+                                        ? 'border-[rgb(var(--primary-rgb)/0.5)] bg-[rgb(var(--primary-rgb)/0.1)] shadow-[0_8px_24px_rgba(var(--primary-rgb),0.15)] scale-[1.02] ring-1 ring-[rgb(var(--primary-rgb)/0.4)]'
                                         : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04] hover:-translate-y-1 hover:shadow-lg',
                                 )}
                             >
@@ -822,7 +830,10 @@ function BatchResultsSection({
                                 )}
                                 
                                 <div className="relative z-10 flex w-full items-start justify-between gap-3">
-                                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/40 text-white/70 group-hover:text-white transition-colors">
+                                    <div className={cx(
+                                        "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors",
+                                        active ? "border-[rgb(var(--primary-rgb)/0.4)] bg-[rgb(var(--primary-rgb)/0.2)] text-white" : "border-white/10 bg-black/40 text-white/70"
+                                    )}>
                                         {analysis.mediaType === 'image' ? <ImageIcon className="h-4 w-4" /> : <Video className="h-4 w-4" />}
                                     </div>
                                     <Badge
@@ -832,20 +843,32 @@ function BatchResultsSection({
                                 </div>
 
                                 <div className="relative z-10 mt-3 min-w-0 flex-1">
-                                    <p className="truncate text-sm font-bold text-white" title={analysis.fileName}>{analysis.fileName}</p>
-                                    <p className="body-soft mt-1 line-clamp-2 text-xs leading-relaxed text-white/60 group-hover:text-white/80 transition-colors">
+                                    <p className={cx("truncate text-sm font-bold transition-colors", active ? "text-white" : "text-white/90")} title={analysis.fileName}>{analysis.fileName}</p>
+                                    <p className="body-soft mt-1 line-clamp-2 text-xs leading-relaxed text-white/60">
                                         {copyFor(language, analysis.summary)}
                                     </p>
                                 </div>
 
-                                <div className="relative z-10 mt-4 flex w-full items-center justify-between border-t border-white/10 pt-3 text-[10px] font-medium text-white/50">
-                                    <div className="flex items-center gap-1.5">
-                                        <Sparkles className="h-3 w-3 text-[var(--primary)]" />
-                                        <span className={cx(isSuccess ? "text-white" : "")}>{analysis.confidence.toFixed(1)}%</span>
+                                <div className="relative z-10 mt-4 flex w-full items-center justify-between border-t border-white/10 pt-3">
+                                    <div className="flex items-center gap-2.5 text-[10px] font-medium text-white/50">
+                                        <div className="flex items-center gap-1">
+                                            <Sparkles className={cx("h-3 w-3", active ? "text-[var(--primary)]" : "text-white/40")} />
+                                            <span className={cx(isSuccess ? "text-white" : "")}>{analysis.confidence.toFixed(1)}%</span>
+                                        </div>
+                                        <div className="h-1 w-1 rounded-full bg-white/20" />
+                                        <div className="flex items-center gap-1">
+                                            <span>{analysis.latencyMs} ms</span>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <Play className="h-2.5 w-2.5" />
-                                        <span>{analysis.latencyMs} ms</span>
+                                    
+                                    <div className={cx(
+                                        "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[10px] font-bold transition-colors",
+                                        active 
+                                            ? "bg-[rgb(var(--primary-rgb)/0.2)] text-[var(--primary)]" 
+                                            : "bg-white/10 text-white/80 group-hover:bg-white/20 group-hover:text-white"
+                                    )}>
+                                        <Play className="h-2.5 w-2.5 fill-current" />
+                                        <span>{language === 'ar' ? 'عرض' : 'View'}</span>
                                     </div>
                                 </div>
                             </motion.button>

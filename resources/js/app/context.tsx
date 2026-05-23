@@ -159,7 +159,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         if (analysis) {
             setHistory((current) => {
                 const withoutDuplicate = current.filter((entry) => String(entry.id) !== String(analysis.id));
-                return [analysis, ...withoutDuplicate].slice(0, 20);
+                return [analysis, ...withoutDuplicate];
             });
         }
     };
@@ -167,7 +167,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const addHistoryItem = (analysis: AnalysisResult) => {
         setHistory((current) => {
             const withoutDuplicate = current.filter((entry) => String(entry.id) !== String(analysis.id));
-            return [analysis, ...withoutDuplicate].slice(0, 20);
+            return [analysis, ...withoutDuplicate];
         });
     };
 
