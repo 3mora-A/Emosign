@@ -433,7 +433,7 @@ function AppRoutes() {
     return (
         <>
             <ScrollAndTitle />
-            <AnimatePresence mode="wait" initial={false}>
+            <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
                     {renderedRoutes}
                     <Route path="*" element={<MissingPage />} />

@@ -184,6 +184,60 @@ export function LandingPage() {
                 </div>
             </section>
 
+            {/* HOW IT WORKS */}
+            <section id="how-it-works" className="app-container scroll-mt-32">
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">{language === 'ar' ? 'كيف يعمل النظام؟' : 'How It Works?'}</h2>
+                    <p className="text-white/50 text-lg max-w-2xl mx-auto">{language === 'ar' ? 'ثلاث خطوات بسيطة تفصلك عن تحليل المشاعر بدقة' : 'Three simple steps to accurate emotion analysis'}</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                    {/* Connecting Line */}
+                    <div className="hidden md:block absolute top-1/3 left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-transparent via-[var(--primary)]/50 to-transparent -translate-y-1/2 z-0" />
+                    
+                    {[
+                        { 
+                            icon: UploadCloud, 
+                            titleAr: '1. اختيار أفضل إطار', titleEn: '1. Keyframe Selection', 
+                            descAr: 'عند رفع فيديو، نقوم بتحليل الإطارات برمجياً واختيار الأفضل بناءً على درجة الوضوح (Sharpness) ومقدار الحركة.', descEn: 'For videos, we programmatically analyze frames and select the best one based on sharpness and motion scores.',
+                            img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=800&auto=format&fit=crop'
+                        },
+                        { 
+                            icon: ScanFace, 
+                            titleAr: '2. استخراج معالم الوجه', titleEn: '2. Facial Landmark Extraction', 
+                            descAr: 'نستخدم تقنيات الرؤية الحاسوبية المتقدمة لتحديد واستخراج النقاط الدقيقة لملامح الوجه استعداداً لتحليلها.', descEn: 'We use advanced computer vision techniques to detect and extract precise facial landmarks in preparation for analysis.',
+                            img: 'https://images.unsplash.com/photo-1544256718-3bcf237f3974?q=80&w=800&auto=format&fit=crop'
+                        },
+                        { 
+                            icon: BrainCircuit, 
+                            titleAr: '3. التصنيف بالتعلم العميق', titleEn: '3. Deep Learning Classification', 
+                            descAr: 'يتم تمرير الصورة عبر شبكة CNN لاستخراج الخصائص، ثم لنموذج SVM لتصنيف الحالة الشعورية.', descEn: 'The image passes through a CNN for feature extraction, then to an SVM model for emotion classification.',
+                            img: 'https://bluesoft.com/wp-content/uploads/2024/11/machine-learning.jpg'
+                        }
+                    ].map((step, i) => (
+                        <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.2, duration: 0.5 }} className="relative z-10 flex flex-col bg-black/40 backdrop-blur-sm border border-white/5 rounded-3xl overflow-hidden hover:bg-white/5 transition-colors group">
+                            {/* Image Header */}
+                            <div className="relative h-48 w-full overflow-visible">
+                                <div className="absolute inset-0 overflow-hidden">
+                                    <img src={step.img} alt={step.titleEn} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                                </div>
+                                
+                                {/* Icon Over Image */}
+                                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 h-16 w-16 rounded-full bg-black border-2 border-[var(--primary)] flex items-center justify-center shadow-[0_0_20px_rgba(var(--primary-rgb),0.4)] z-20">
+                                    <step.icon className="h-7 w-7 text-[var(--primary)]" />
+                                </div>
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="pt-10 pb-8 px-6 text-center flex-1 flex flex-col relative z-10">
+                                <h3 className="text-xl font-bold text-white mb-3">{language === 'ar' ? step.titleAr : step.titleEn}</h3>
+                                <p className="text-white/60 text-sm leading-relaxed">{language === 'ar' ? step.descAr : step.descEn}</p>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </section>
+
             {/* ABOUT US - BENTO GRID */}
             <section id="about" className="app-container scroll-mt-32">
                 <div className="text-center mb-16">
@@ -194,7 +248,7 @@ export function LandingPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
                     {/* Large Card */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}
                         className="md:col-span-2 md:row-span-2 relative rounded-[2.5rem] overflow-hidden group"
                     >
                         <img src="/images/sign-language-ai.png" alt="Sign Language AI Tracking" className="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-105" />
@@ -207,7 +261,7 @@ export function LandingPage() {
 
                     {/* Small Card 1 */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.2, duration: 0.5 }}
                         className="relative rounded-[2.5rem] overflow-hidden bg-white/5 border border-white/10 p-8 flex flex-col justify-center items-center text-center group hover:bg-white/10 transition-colors"
                     >
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgb(var(--primary-rgb)/0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -218,7 +272,7 @@ export function LandingPage() {
 
                     {/* Small Card 2 */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }}
+                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.4, duration: 0.5 }}
                         className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[var(--primary)]/20 to-transparent border border-[var(--primary)]/30 p-8 flex flex-col justify-center items-center text-center group"
                     >
                         <div className="flex gap-4 mb-6">
@@ -228,32 +282,6 @@ export function LandingPage() {
                         <h3 className="text-2xl font-bold text-white mb-2">{language === 'ar' ? 'دعم شامل' : 'Universal Support'}</h3>
                         <p className="text-white/70">{language === 'ar' ? 'نحلل الصور الثابتة ومقاطع الفيديو بنفس الكفاءة.' : 'We analyze static images and video clips with the same efficiency.'}</p>
                     </motion.div>
-                </div>
-            </section>
-
-            {/* HOW IT WORKS */}
-            <section id="how-it-works" className="app-container scroll-mt-32">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">{language === 'ar' ? 'كيف يعمل النظام؟' : 'How It Works?'}</h2>
-                    <p className="text-white/50 text-lg max-w-2xl mx-auto">{language === 'ar' ? 'ثلاث خطوات بسيطة تفصلك عن تحليل المشاعر بدقة' : 'Three simple steps to accurate emotion analysis'}</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-                    {/* Connecting Line */}
-                    <div className="hidden md:block absolute top-1/2 left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-transparent via-[var(--primary)]/50 to-transparent -translate-y-1/2 z-0" />
-                    
-                    {[
-                        { icon: UploadCloud, titleAr: '1. رفع العينة', titleEn: '1. Upload Sample', descAr: 'قم برفع صورة أو مقطع فيديو من جهازك.', descEn: 'Upload an image or video from your device.' },
-                        { icon: BrainCircuit, titleAr: '2. تحليل الذكاء الاصطناعي', titleEn: '2. AI Analysis', descAr: 'يقوم النظام بمعالجة الإطارات واستخراج المشاعر في أجزاء من الثانية.', descEn: 'The system processes frames and extracts emotions in milliseconds.' },
-                        { icon: BarChart3, titleAr: '3. عرض النتائج', titleEn: '3. View Results', descAr: 'احصل على تقرير مفصل يوضح الحالة الشعورية ونسبة الدقة.', descEn: 'Get a detailed report showing the emotional state and accuracy.' }
-                    ].map((step, i) => (
-                        <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2 }} className="relative z-10 flex flex-col items-center text-center bg-black/40 backdrop-blur-sm border border-white/5 rounded-3xl p-8 hover:bg-white/5 transition-colors">
-                            <div className="h-20 w-20 rounded-full bg-[var(--primary)]/20 border border-[var(--primary)]/30 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)]">
-                                <step.icon className="h-10 w-10 text-[var(--primary)]" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-white mb-3">{language === 'ar' ? step.titleAr : step.titleEn}</h3>
-                            <p className="text-white/60">{language === 'ar' ? step.descAr : step.descEn}</p>
-                        </motion.div>
-                    ))}
                 </div>
             </section>
 
@@ -267,19 +295,19 @@ export function LandingPage() {
                         <h2 className="text-4xl md:text-5xl font-black text-white mb-16">{language === 'ar' ? 'أرقام تتحدث عن نفسها' : 'Numbers That Speak'}</h2>
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 divide-y md:divide-y-0 md:divide-x divide-white/10 rtl:divide-x-reverse">
-                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} className="flex flex-col items-center justify-center pt-6 md:pt-0">
+                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} className="flex flex-col items-center justify-center pt-6 md:pt-0">
                                 <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-4">85%</div>
                                 <p className="text-xl text-[var(--primary)] font-bold mb-2">{language === 'ar' ? 'دقة التعرف' : 'Recognition Accuracy'}</p>
                                 <p className="text-white/50 text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط الدقة في ظروف الإضاءة الطبيعية' : 'Average accuracy in natural lighting conditions'}</p>
                             </motion.div>
                             
-                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
+                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.2, duration: 0.5 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
                                 <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-4">0.5s</div>
                                 <p className="text-xl text-[var(--primary)] font-bold mb-2">{language === 'ar' ? 'سرعة الاستجابة' : 'Response Time'}</p>
                                 <p className="text-white/50 text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط زمن المعالجة للطلب الواحد' : 'Average processing time per request'}</p>
                             </motion.div>
 
-                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
+                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.4, duration: 0.5 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
                                 <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-4">500+</div>
                                 <p className="text-xl text-[var(--primary)] font-bold mb-2">{language === 'ar' ? 'عينة اختبار' : 'Test Samples'}</p>
                                 <p className="text-white/50 text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'تم اختبارها بنجاح على النظام' : 'Successfully tested on the system'}</p>
@@ -299,9 +327,11 @@ export function LandingPage() {
                     {[
                         { name: 'الطالب الأول', roleAr: 'مطور ذكاء اصطناعي', roleEn: 'AI Developer', img: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=500&auto=format&fit=crop' },
                         { name: 'الطالب الثاني', roleAr: 'مطور واجهات', roleEn: 'Frontend Developer', img: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=500&auto=format&fit=crop' },
+                        { name: 'الطالب الثالث', roleAr: 'مطور خلفية', roleEn: 'Backend Developer', img: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=500&auto=format&fit=crop' },
+                        { name: 'الطالب الرابع', roleAr: 'محلل بيانات', roleEn: 'Data Analyst', img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=500&auto=format&fit=crop' },
                         { name: 'الدكتور المشرف', roleAr: 'المشرف الأكاديمي', roleEn: 'Academic Supervisor', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=500&auto=format&fit=crop' }
                     ].map((member, i) => (
-                        <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2 }} className="flex flex-col items-center text-center group">
+                        <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.1, duration: 0.5 }} className="flex flex-col items-center text-center group">
                             <div className="relative w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-white/10 group-hover:border-[var(--primary)]/50 transition-colors duration-300">
                                 <img src={member.img} alt={member.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             </div>
@@ -315,7 +345,7 @@ export function LandingPage() {
             {/* CTA */}
             <section className="app-container text-center pb-10">
                 <motion.div 
-                    initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                    initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}
                     className="inline-flex flex-col items-center"
                 >
                     <h2 className="text-3xl md:text-5xl font-black text-white mb-8">{language === 'ar' ? 'هل أنت مستعد للتجربة؟' : 'Ready to experience it?'}</h2>
