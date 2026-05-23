@@ -20,9 +20,9 @@ export const publicNav: NavItem[] = [
 ];
 
 export const appNav: NavItem[] = [
+    { to: '/', label: createCopy('الرئيسية', 'Home'), icon: 'home', exact: true },
     { to: '/upload', label: createCopy('الرفع والتحليل', 'Upload & Analysis'), icon: 'sparkles' },
     { to: '/history', label: createCopy('السجل', 'History'), icon: 'history' },
-    { to: '/settings', label: createCopy('الإعدادات', 'Settings'), icon: 'settings' },
     { to: '/admin/dashboard', label: createCopy('لوحة الإدارة', 'Admin Panel'), icon: 'shield', adminOnly: true },
 ];
 

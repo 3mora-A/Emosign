@@ -28,13 +28,16 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        if ($request->expectsJson()) {
-            return response()->json([
-                'ok' => true,
-                'message' => 'تم إنشاء الحساب بنجاح.',
-                'redirect' => '/upload',
-            ]);
-        }
+            if ($request->expectsJson()) {
+                $locale = $user->preferred_language ?? app()->getLocale();
+                $message = $locale === 'en' ? 'Account created successfully.' : 'تم إنشاء الحساب بنجاح.';
+
+                return response()->json([
+                    'ok' => true,
+                    'message' => $message,
+                    'redirect' => '/upload',
+                ]);
+            }
 
         return redirect('/upload')->with('success', 'تم إنشاء الحساب بنجاح!');
     }

@@ -68,7 +68,7 @@ function SectionTitle({
     return (
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div className="flex items-start gap-3">
-                <span className="rounded-2xl border border-white/10 bg-white/5 p-2.5 text-[var(--primary)]">
+                <span className="rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] p-2.5 text-[var(--primary)]">
                     {icon}
                 </span>
                 <div>
@@ -144,7 +144,7 @@ function MiniBar({ value, max, tone = 'primary' }: { value: number; max: number;
         error: 'from-rose-500/40 to-rose-400',
     };
     return (
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--surface-strong)]">
             <div
                 className={`h-full rounded-full bg-gradient-to-r ${colors[tone]}`}
                 style={{ width: `${pct}%` }}
@@ -289,7 +289,7 @@ export function DashboardPage() {
                                     to={action.to}
                                     className="panel-soft group flex items-start gap-4 rounded-2xl p-4 transition hover:-translate-y-0.5 hover:border-[var(--primary)]/40"
                                 >
-                                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/5 text-[var(--primary)]">
+                                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] text-[var(--primary)]">
                                         <Compass className="h-5 w-5" />
                                     </span>
                                     <div className="flex-1">
@@ -501,7 +501,7 @@ export function HistoryPage() {
                                             transition={{ duration: 0.15 }} // Faster fade transition
                                             className="overflow-hidden"
                                         >
-                                            <SpotlightCard noHover className="relative flex min-h-0 flex-col overflow-hidden !p-0 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.5)] ring-1 ring-white/[0.05]">
+                                                <SpotlightCard noHover className="relative flex min-h-0 flex-col overflow-hidden !p-0 shadow-xl ring-1 ring-[var(--line)]">
                                                 <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgb(var(--secondary-rgb)/0.15),transparent_50%)]" />
                                                 
                                                 <div className="relative flex flex-1 flex-col p-4 sm:p-5">
@@ -515,10 +515,10 @@ export function HistoryPage() {
                                                     )}
                                                 </div>
 
-                                                <div className="border-t border-white/[0.06] bg-black/20">
+                                                <div className="border-t border-[var(--line)] bg-[var(--surface)]">
                                                     <div className="p-5 sm:p-6">
                                                         <div className="mb-5 flex items-center justify-between">
-                                                            <h3 className="text-base font-bold text-white">
+                                                            <h3 className="text-base font-bold text-[var(--text)]">
                                                                 {language === 'ar' ? 'تفاصيل النتيجة' : 'Result Details'}
                                                             </h3>
                                                             <Badge tone="success" text={language === 'ar' ? 'مكتمل' : 'Completed'} />
@@ -533,7 +533,7 @@ export function HistoryPage() {
                                                                         <span className="body-soft">{language === 'ar' ? 'درجة الثقة' : 'Confidence'}</span>
                                                                         <span className="font-bold text-[var(--primary)]">{selectedAnalysis.confidence.toFixed(1)}%</span>
                                                                     </div>
-                                                                    <div className="h-2 overflow-hidden rounded-full bg-white/6">
+                                                                    <div className="h-2 overflow-hidden rounded-full bg-[var(--surface-strong)]">
                                                                         <div
                                                                             className="h-full rounded-full bg-[linear-gradient(90deg,var(--accent),var(--secondary),var(--primary))]"
                                                                             style={{ width: `${Math.max(4, Math.min(100, selectedAnalysis.confidence))}%` }}
@@ -591,7 +591,7 @@ export function HistoryPage() {
                                                     'group relative flex flex-col overflow-hidden rounded-xl border p-4 text-left transition-all duration-300',
                                                     active
                                                         ? 'border-[rgb(var(--primary-rgb)/0.5)] bg-[rgb(var(--primary-rgb)/0.1)] shadow-[0_8px_24px_rgba(var(--primary-rgb),0.15)] scale-[1.02] ring-1 ring-[rgb(var(--primary-rgb)/0.4)]'
-                                                        : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04] hover:-translate-y-1 hover:shadow-lg',
+                                                        : 'border-[var(--card-border)] bg-[var(--surface)] hover:border-[var(--line-strong)] hover:bg-[var(--surface-strong)] hover:-translate-y-1 hover:shadow-lg',
                                                 )}
                                             >
                                                 {active && (
@@ -601,7 +601,7 @@ export function HistoryPage() {
                                                 <div className="relative z-10 flex w-full items-start justify-between gap-3">
                                                     <div className={cx(
                                                         "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors",
-                                                        active ? "border-[rgb(var(--primary-rgb)/0.4)] bg-[rgb(var(--primary-rgb)/0.2)] text-white" : "border-white/10 bg-black/40 text-white/70"
+                                                        active ? "border-[rgb(var(--primary-rgb)/0.4)] bg-[rgb(var(--primary-rgb)/0.2)] text-[var(--text)]" : "border-[var(--card-border)] bg-[var(--surface-strong)] text-[var(--text-soft)]"
                                                     )}>
                                                         {entry.mediaType === 'image' ? <ImageIcon className="h-4 w-4" /> : <Video className="h-4 w-4" />}
                                                     </div>
@@ -612,19 +612,19 @@ export function HistoryPage() {
                                                 </div>
 
                                                 <div className="relative z-10 mt-3 min-w-0 flex-1">
-                                                    <p className={cx("truncate text-sm font-bold transition-colors", active ? "text-white" : "text-white/90")} title={entry.fileName}>{entry.fileName}</p>
-                                                    <p className="body-soft mt-1 line-clamp-2 text-xs leading-relaxed text-white/60">
+                                                    <p className={cx("truncate text-sm font-bold transition-colors", active ? "text-[var(--text)]" : "text-[var(--text)]")} title={entry.fileName}>{entry.fileName}</p>
+                                                    <p className="body-soft mt-1 line-clamp-2 text-xs leading-relaxed text-[var(--text-soft)]">
                                                         {copyFor(language, entry.summary)}
                                                     </p>
                                                 </div>
 
-                                                <div className="relative z-10 mt-4 flex w-full items-center justify-between border-t border-white/10 pt-3">
-                                                    <div className="flex items-center gap-2.5 text-[10px] font-medium text-white/50">
+                                                <div className="relative z-10 mt-4 flex w-full items-center justify-between border-t border-[var(--line)] pt-3">
+                                                    <div className="flex items-center gap-2.5 text-[10px] font-medium text-[var(--text-muted)]">
                                                         <div className="flex items-center gap-1">
-                                                            <Sparkles className={cx("h-3 w-3", active ? "text-[var(--primary)]" : "text-white/40")} />
-                                                            <span className={cx(isSuccess ? "text-white" : "")}>{entry.confidence.toFixed(1)}%</span>
+                                                            <Sparkles className={cx("h-3 w-3", active ? "text-[var(--primary)]" : "text-[var(--text-muted)]")} />
+                                                            <span className={cx(isSuccess ? "text-[var(--text)]" : "")}>{entry.confidence.toFixed(1)}%</span>
                                                         </div>
-                                                        <div className="h-1 w-1 rounded-full bg-white/20" />
+                                                        <div className="h-1 w-1 rounded-full bg-[var(--line-strong)]" />
                                                         <div className="flex items-center gap-1">
                                                             <span>{entry.latencyMs} ms</span>
                                                         </div>
@@ -634,7 +634,7 @@ export function HistoryPage() {
                                                         "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[10px] font-bold transition-colors",
                                                         active 
                                                             ? "bg-[rgb(var(--primary-rgb)/0.2)] text-[var(--primary)]" 
-                                                            : "bg-white/10 text-white/80 group-hover:bg-white/20 group-hover:text-white"
+                                                            : "bg-[var(--surface-strong)] text-[var(--text-soft)] group-hover:bg-[var(--line)] group-hover:text-[var(--text)]"
                                                     )}>
                                                         <Play className="h-2.5 w-2.5 fill-current" />
                                                         <span>{language === 'ar' ? 'عرض' : 'View'}</span>

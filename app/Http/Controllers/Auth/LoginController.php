@@ -25,9 +25,13 @@ class LoginController extends Controller
                 : '/upload';
 
             if ($request->expectsJson()) {
+                // Determine message based on user's preferred language or app locale
+                $locale = auth()->user()->preferred_language ?? app()->getLocale();
+                $message = $locale === 'en' ? 'Signed in successfully.' : 'تم تسجيل الدخول بنجاح.';
+
                 return response()->json([
                     'ok' => true,
-                    'message' => 'تم تسجيل الدخول بنجاح.',
+                    'message' => $message,
                     'redirect' => $redirect,
                 ]);
             }
@@ -36,9 +40,12 @@ class LoginController extends Controller
         }
 
         if ($request->expectsJson()) {
+            $locale = app()->getLocale();
+            $message = $locale === 'en' ? 'Invalid login credentials.' : 'بيانات الدخول غير صحيحة.';
+            
             return response()->json([
                 'ok' => false,
-                'message' => 'بيانات الدخول غير صحيحة.',
+                'message' => $message,
             ], 422);
         }
 

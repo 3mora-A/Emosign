@@ -73,7 +73,7 @@ function AuthShell({
                         <div className="mt-10 data-grid">
                             {landingHighlights.map((item) => (
                                 <SpotlightCard key={copyFor(language, item.title)} className="min-h-[190px]">
-                                    <div className="mb-4 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-white/[0.08] via-white/[0.02] to-transparent p-3 shadow-inner ring-1 ring-white/[0.04]">
+                                    <div className="mb-4 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-[var(--primary)]/10 via-[var(--primary)]/5 to-transparent p-3 shadow-inner ring-1 ring-[var(--line)]">
                                         <AppIcon name={item.icon} className="h-5 w-5 text-[var(--primary)]" />
                                     </div>
                                     <h3 className="text-xl font-bold">{copyFor(language, item.title)}</h3>
@@ -86,7 +86,7 @@ function AuthShell({
 
                 <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate" className="panel-strong rounded-[2rem] p-7 md:p-8">
                     {children}
-                    <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-white/8 pt-6">
+                    <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-[var(--line)] pt-6">
                         <Badge tone="info" text={language === 'ar' ? 'ثنائي اللغة' : 'Bilingual'} />
                         <Badge tone="success" text="Laravel Backend" />
                         <Badge tone="warning" text="Python Inference" />
@@ -111,10 +111,10 @@ function FloatingBadge({ icon, text, delay, className }: { icon: ReactNode, text
         <motion.div
             animate={{ y: [0, -15, 0] }}
             transition={{ duration: 4, repeat: Infinity, delay, ease: "easeInOut" }}
-            className={cx("absolute flex items-center gap-3 rounded-2xl border border-white/10 bg-black/60 p-3 md:p-4 backdrop-blur-xl shadow-2xl z-20", className)}
+            className={cx("absolute flex items-center gap-3 rounded-2xl border border-[var(--card-border)] bg-[var(--surface)]/90 p-3 md:p-4 backdrop-blur-xl shadow-2xl z-20", className)}
         >
             {icon}
-            <span className="font-bold text-xs md:text-sm tracking-wide text-white">{text}</span>
+            <span className="font-bold text-xs md:text-sm tracking-wide text-[var(--text)]">{text}</span>
         </motion.div>
     );
 }
@@ -141,7 +141,7 @@ export function LandingPage() {
                             {language === 'ar' ? 'الجيل الجديد من الذكاء الاصطناعي' : 'Next-Gen AI Technology'}
                         </div>
 
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.2] tracking-tight text-white">
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.2] tracking-tight text-[var(--text)]">
                             {language === 'ar' ? (
                                 <>نظام تعلم عميق متكامل <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]">لتحليل المشاعر</span></>
                             ) : (
@@ -149,7 +149,7 @@ export function LandingPage() {
                             )}
                         </h1>
 
-                        <p className="mt-6 text-lg text-white/60 leading-relaxed max-w-lg">
+                        <p className="mt-6 text-lg text-[var(--text-soft)] leading-relaxed max-w-lg">
                             {language === 'ar'
                                 ? 'ارفع أي صورة أو فيديو، وسيقوم محرك التعلم العميق الخاص بنا بتحليل تعابير الوجه بدقة متناهية لاستخراج الحالة الشعورية فوراً.'
                                 : 'Upload any image or video, and our deep learning engine will analyze facial expressions with extreme accuracy to extract the emotional state instantly.'}
@@ -169,26 +169,27 @@ export function LandingPage() {
                         transition={{ duration: 1, delay: 0.2 }}
                         className="relative h-[400px] sm:h-[500px] lg:h-[600px] w-full z-10 mt-10 lg:mt-0"
                     >
-                        <div className="absolute inset-0 rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
-                            <img src="/images/hero-face.png" alt="AI Face Analysis" className="w-full h-full object-cover opacity-70" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
-                            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+                        <div className="absolute inset-0 rounded-[3rem] overflow-hidden border border-[var(--card-border)] shadow-2xl bg-[var(--surface-strong)]">
+                            <img src="/images/hero-face.png" alt="AI Face Analysis" className="w-full h-full object-cover opacity-100" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-strong)] via-[var(--surface-strong)]/40 to-transparent" />
+                            <div className="absolute inset-0 bg-[linear-gradient(rgba(147,51,234,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(147,51,234,0.05)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
                         </div>
 
                         {/* Floating Elements */}
-                        <FloatingBadge icon={<Smile className="text-emerald-400 h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? 'سعيد 98%' : 'Happy 98%'} delay={0} className="top-12 -left-4 md:-left-8 lg:-left-12" />
-                        <FloatingBadge icon={<Frown className="text-blue-400 h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? 'حزين 12%' : 'Sad 12%'} delay={1.5} className="bottom-24 -right-4 md:-right-8 lg:-right-12" />
-                        <FloatingBadge icon={<Zap className="text-amber-400 h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? '0.2ث استجابة' : '0.2s Latency'} delay={0.7} className="top-1/2 -left-8 md:-left-12 lg:-left-16" />
-                        <FloatingBadge icon={<ScanFace className="text-[var(--primary)] h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? 'تحليل الوجوه' : 'Face Scan'} delay={2.2} className="top-1/4 -right-4 md:-right-6 lg:-right-10" />
+                        <FloatingBadge icon={<Smile className="text-emerald-400 h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? 'سعيد' : 'Happy'} delay={0} className="top-12 -left-4 md:-left-8 lg:-left-12" />
+                        <FloatingBadge icon={<Frown className="text-blue-400 h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? 'حزين' : 'Sad'} delay={1.5} className="bottom-24 -right-4 md:-right-8 lg:-right-12" />
+                        <FloatingBadge icon={<Zap className="text-amber-400 h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? '0.5ث استجابة' : '0.5s Latency'} delay={0.7} className="top-1/2 -left-8 md:-left-12 lg:-left-16" />
+                        <FloatingBadge icon={<ScanFace className="text-[var(--primary)] h-5 w-5 md:h-6 md:w-6"/>} text={language === 'ar' ? 'تحليل المشاعر' : 'Emotion Analysis'} delay={2.2} className="top-1/4 -right-4 md:-right-6 lg:-right-10" />
                     </motion.div>
                 </div>
             </section>
 
             {/* HOW IT WORKS */}
-            <section id="how-it-works" className="app-container scroll-mt-32">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">{language === 'ar' ? 'كيف يعمل النظام؟' : 'How It Works?'}</h2>
-                    <p className="text-white/50 text-lg max-w-2xl mx-auto">{language === 'ar' ? 'ثلاث خطوات بسيطة تفصلك عن تحليل المشاعر بدقة' : 'Three simple steps to accurate emotion analysis'}</p>
+            <section id="how-it-works" className="app-container scroll-mt-32 relative">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-r from-[var(--primary)]/10 via-[var(--accent)]/10 to-[var(--secondary)]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+                <div className="text-center mb-16 relative z-10">
+                    <h2 className="text-4xl md:text-5xl font-black text-[var(--text)] mb-4">{language === 'ar' ? 'كيف يعمل النظام؟' : 'How It Works?'}</h2>
+                    <p className="text-[var(--text-soft)] text-lg max-w-2xl mx-auto">{language === 'ar' ? 'ثلاث خطوات بسيطة تفصلك عن تحليل المشاعر بدقة' : 'Three simple steps to accurate emotion analysis'}</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
                     {/* Connecting Line */}
@@ -214,24 +215,24 @@ export function LandingPage() {
                             img: 'https://bluesoft.com/wp-content/uploads/2024/11/machine-learning.jpg'
                         }
                     ].map((step, i) => (
-                        <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.2, duration: 0.5 }} className="relative z-10 flex flex-col bg-black/40 backdrop-blur-sm border border-white/5 rounded-3xl overflow-hidden hover:bg-white/5 transition-colors group">
+                        <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.2, duration: 0.5 }} className="relative z-10 flex flex-col bg-gradient-to-b from-[var(--surface)] to-[var(--surface-strong)] backdrop-blur-sm border border-[var(--card-border)] rounded-3xl overflow-hidden shadow-xl">
                             {/* Image Header */}
                             <div className="relative h-48 w-full overflow-visible">
                                 <div className="absolute inset-0 overflow-hidden">
-                                    <img src={step.img} alt={step.titleEn} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                                    <img src={step.img} alt={step.titleEn} className="w-full h-full object-cover opacity-100" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-strong)] via-[var(--surface-strong)]/20 to-transparent opacity-90" />
                                 </div>
                                 
                                 {/* Icon Over Image */}
-                                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 h-16 w-16 rounded-full bg-black border-2 border-[var(--primary)] flex items-center justify-center shadow-[0_0_20px_rgba(var(--primary-rgb),0.4)] z-20">
+                                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 h-16 w-16 rounded-full bg-[var(--bg)] border-2 border-[var(--primary)] flex items-center justify-center shadow-[0_0_20px_rgba(var(--primary-rgb),0.4)] z-20">
                                     <step.icon className="h-7 w-7 text-[var(--primary)]" />
                                 </div>
                             </div>
                             
                             {/* Content */}
                             <div className="pt-10 pb-8 px-6 text-center flex-1 flex flex-col relative z-10">
-                                <h3 className="text-xl font-bold text-white mb-3">{language === 'ar' ? step.titleAr : step.titleEn}</h3>
-                                <p className="text-white/60 text-sm leading-relaxed">{language === 'ar' ? step.descAr : step.descEn}</p>
+                                <h3 className="text-xl font-bold text-[var(--text)] mb-3">{language === 'ar' ? step.titleAr : step.titleEn}</h3>
+                                <p className="text-[var(--text-soft)] text-sm leading-relaxed">{language === 'ar' ? step.descAr : step.descEn}</p>
                             </div>
                         </motion.div>
                     ))}
@@ -239,78 +240,82 @@ export function LandingPage() {
             </section>
 
             {/* ABOUT US - BENTO GRID */}
-            <section id="about" className="app-container scroll-mt-32">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">{language === 'ar' ? 'عن النظام' : 'About The System'}</h2>
-                    <p className="text-white/50 text-lg max-w-2xl mx-auto">{language === 'ar' ? 'بنية تحتية متطورة تجمع بين سرعة الأداء ودقة الذكاء الاصطناعي' : 'Advanced infrastructure combining high-speed performance with AI accuracy'}</p>
+            <section id="about" className="app-container scroll-mt-32 relative">
+                <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--primary)]/15 rounded-full blur-[120px] pointer-events-none -z-10" />
+                <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[500px] h-[500px] bg-[var(--accent)]/15 rounded-full blur-[120px] pointer-events-none -z-10" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[var(--secondary)]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+                <div className="text-center mb-16 relative z-10">
+                    <h2 className="text-4xl md:text-5xl font-black text-[var(--text)] mb-4">{language === 'ar' ? 'عن النظام' : 'About The System'}</h2>
+                    <p className="text-[var(--text-soft)] text-lg max-w-2xl mx-auto">{language === 'ar' ? 'بنية تحتية متطورة تجمع بين سرعة الأداء ودقة الذكاء الاصطناعي' : 'Advanced infrastructure combining high-speed performance with AI accuracy'}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
                     {/* Large Card */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}
-                        className="md:col-span-2 md:row-span-2 relative rounded-[2.5rem] overflow-hidden group"
+                        className="md:col-span-2 md:row-span-2 relative rounded-[2.5rem] overflow-hidden shadow-xl bg-gradient-to-br from-[var(--surface-strong)] to-[var(--primary)]/10 border border-[var(--card-border)]"
                     >
-                        <img src="/images/sign-language-ai.png" alt="Sign Language AI Tracking" className="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-105" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                        <img src="/images/sign-language-ai.png" alt="Sign Language AI Tracking" className="absolute inset-0 w-full h-full object-cover opacity-80" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-strong)] via-[var(--surface-strong)]/40 to-transparent" />
                         <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end">
-                            <h3 className="text-3xl md:text-4xl font-black text-white mb-4">{language === 'ar' ? 'تحليل متقدم لتعابير الوجه' : 'Advanced Facial Expression Analysis'}</h3>
-                            <p className="text-white/80 text-lg max-w-md leading-relaxed">{language === 'ar' ? 'يقوم نظامنا برصد وتحليل أدق التغيرات في ملامح الوجه في الوقت الفعلي، مما يتيح فهماً عميقاً ودقيقاً للحالة الشعورية للمستخدم في أجزاء من الثانية.' : 'Our system detects and analyzes the subtlest changes in facial features in real-time, enabling a deep and accurate understanding of the user\'s emotional state in milliseconds.'}</p>
+                            <h3 className="text-3xl md:text-4xl font-black text-[var(--text)] mb-4">{language === 'ar' ? 'تحليل متقدم لتعابير الوجه' : 'Advanced Facial Expression Analysis'}</h3>
+                            <p className="text-[var(--text-soft)] text-lg max-w-md leading-relaxed">{language === 'ar' ? 'يقوم نظامنا برصد وتحليل أدق التغيرات في ملامح الوجه في الوقت الفعلي، مما يتيح فهماً عميقاً ودقيقاً للحالة الشعورية للمستخدم في أجزاء من الثانية.' : 'Our system detects and analyzes the subtlest changes in facial features in real-time, enabling a deep and accurate understanding of the user\'s emotional state in milliseconds.'}</p>
                         </div>
                     </motion.div>
 
                     {/* Small Card 1 */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.2, duration: 0.5 }}
-                        className="relative rounded-[2.5rem] overflow-hidden bg-white/5 border border-white/10 p-8 flex flex-col justify-center items-center text-center group hover:bg-white/10 transition-colors"
+                        className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[var(--surface)] to-[var(--primary)]/5 border border-[var(--card-border)] p-8 flex flex-col justify-center items-center text-center shadow-xl"
                     >
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgb(var(--primary-rgb)/0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                        <ScanFace className="h-16 w-16 text-white mb-6" />
-                        <h3 className="text-2xl font-bold text-white mb-2">{language === 'ar' ? 'دقة عالية' : 'High Accuracy'}</h3>
-                        <p className="text-white/50">{language === 'ar' ? 'نماذج مدربة على ملايين الصور لضمان دقة لا مثيل لها.' : 'Models trained on millions of images to ensure unmatched precision.'}</p>
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgb(var(--primary-rgb)/0.1),transparent_70%)] opacity-50" />
+                        <ScanFace className="h-16 w-16 text-[var(--primary)] mb-6" />
+                        <h3 className="text-2xl font-bold text-[var(--text)] mb-2">{language === 'ar' ? 'دقة عالية' : 'High Accuracy'}</h3>
+                        <p className="text-[var(--text-soft)]">{language === 'ar' ? 'نماذج مدربة على ملايين الصور لضمان دقة لا مثيل لها.' : 'Models trained on millions of images to ensure unmatched precision.'}</p>
                     </motion.div>
 
                     {/* Small Card 2 */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.4, duration: 0.5 }}
-                        className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[var(--primary)]/20 to-transparent border border-[var(--primary)]/30 p-8 flex flex-col justify-center items-center text-center group"
+                        className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[var(--surface)] to-[var(--accent)]/5 border border-[var(--card-border)] p-8 flex flex-col justify-center items-center text-center shadow-xl"
                     >
                         <div className="flex gap-4 mb-6">
-                            <PlaySquare className="h-12 w-12 text-white/80" />
-                            <ImageIcon className="h-12 w-12 text-white/80" />
+                            <PlaySquare className="h-12 w-12 text-[var(--primary)]" />
+                            <ImageIcon className="h-12 w-12 text-[var(--primary)]" />
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-2">{language === 'ar' ? 'دعم شامل' : 'Universal Support'}</h3>
-                        <p className="text-white/70">{language === 'ar' ? 'نحلل الصور الثابتة ومقاطع الفيديو بنفس الكفاءة.' : 'We analyze static images and video clips with the same efficiency.'}</p>
+                        <h3 className="text-2xl font-bold text-[var(--text)] mb-2">{language === 'ar' ? 'دعم شامل' : 'Universal Support'}</h3>
+                        <p className="text-[var(--text-soft)]">{language === 'ar' ? 'نحلل الصور الثابتة ومقاطع الفيديو بنفس الكفاءة.' : 'We analyze static images and video clips with the same efficiency.'}</p>
                     </motion.div>
                 </div>
             </section>
 
             {/* ACHIEVEMENTS */}
-            <section id="achievements" className="app-container scroll-mt-32">
-                <div className="relative rounded-[3rem] overflow-hidden bg-black border border-white/10 py-20 px-8 md:px-16 text-center">
-                    <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1000&auto=format&fit=crop')" }} />
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <section id="achievements" className="app-container scroll-mt-32 relative">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-gradient-to-r from-[var(--secondary)]/10 to-[var(--primary)]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+                <div className="relative rounded-[3rem] overflow-hidden bg-gradient-to-br from-[var(--surface-strong)] to-[var(--surface)] border border-[var(--card-border)] py-20 px-8 md:px-16 text-center shadow-2xl">
+                    <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1000&auto=format&fit=crop')" }} />
+                    <div className="absolute inset-0 bg-[var(--surface-strong)]/60 backdrop-blur-sm" />
                     
                     <div className="relative z-10">
-                        <h2 className="text-4xl md:text-5xl font-black text-white mb-16">{language === 'ar' ? 'أرقام تتحدث عن نفسها' : 'Numbers That Speak'}</h2>
+                        <h2 className="text-4xl md:text-5xl font-black text-[var(--text)] mb-16">{language === 'ar' ? 'أرقام تتحدث عن نفسها' : 'Numbers That Speak'}</h2>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 divide-y md:divide-y-0 md:divide-x divide-white/10 rtl:divide-x-reverse">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 divide-y md:divide-y-0 md:divide-x divide-[var(--line)] rtl:divide-x-reverse">
                             <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} className="flex flex-col items-center justify-center pt-6 md:pt-0">
-                                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-4">85%</div>
-                                <p className="text-xl text-[var(--primary)] font-bold mb-2">{language === 'ar' ? 'دقة التعرف' : 'Recognition Accuracy'}</p>
-                                <p className="text-white/50 text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط الدقة في ظروف الإضاءة الطبيعية' : 'Average accuracy in natural lighting conditions'}</p>
+                                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[var(--primary)] to-[var(--secondary)] mb-4">85%</div>
+                                <p className="text-xl text-[var(--text)] font-bold mb-2">{language === 'ar' ? 'دقة التعرف' : 'Recognition Accuracy'}</p>
+                                <p className="text-[var(--text-soft)] text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط الدقة في ظروف الإضاءة الطبيعية' : 'Average accuracy in natural lighting conditions'}</p>
                             </motion.div>
                             
                             <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.2, duration: 0.5 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
-                                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-4">0.5s</div>
-                                <p className="text-xl text-[var(--primary)] font-bold mb-2">{language === 'ar' ? 'سرعة الاستجابة' : 'Response Time'}</p>
-                                <p className="text-white/50 text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط زمن المعالجة للطلب الواحد' : 'Average processing time per request'}</p>
+                                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[var(--primary)] to-[var(--secondary)] mb-4">0.5s</div>
+                                <p className="text-xl text-[var(--text)] font-bold mb-2">{language === 'ar' ? 'سرعة الاستجابة' : 'Response Time'}</p>
+                                <p className="text-[var(--text-soft)] text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط زمن المعالجة للطلب الواحد' : 'Average processing time per request'}</p>
                             </motion.div>
 
                             <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.4, duration: 0.5 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
-                                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 mb-4">500+</div>
-                                <p className="text-xl text-[var(--primary)] font-bold mb-2">{language === 'ar' ? 'عينة اختبار' : 'Test Samples'}</p>
-                                <p className="text-white/50 text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'تم اختبارها بنجاح على النظام' : 'Successfully tested on the system'}</p>
+                                <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[var(--primary)] to-[var(--secondary)] mb-4">500+</div>
+                                <p className="text-xl text-[var(--text)] font-bold mb-2">{language === 'ar' ? 'عينة اختبار' : 'Test Samples'}</p>
+                                <p className="text-[var(--text-soft)] text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'تم اختبارها بنجاح على النظام' : 'Successfully tested on the system'}</p>
                             </motion.div>
                         </div>
                     </div>
@@ -318,10 +323,11 @@ export function LandingPage() {
             </section>
 
             {/* OUR TEAM */}
-            <section id="team" className="app-container scroll-mt-32">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-4">{language === 'ar' ? 'فريق العمل' : 'Our Team'}</h2>
-                    <p className="text-white/50 text-lg max-w-2xl mx-auto">{language === 'ar' ? 'المطورون والباحثون خلف هذا النظام' : 'The developers and researchers behind this system'}</p>
+            <section id="team" className="app-container scroll-mt-32 relative">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-t from-[var(--accent)]/10 to-[var(--primary)]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+                <div className="text-center mb-16 relative z-10">
+                    <h2 className="text-4xl md:text-5xl font-black text-[var(--text)] mb-4">{language === 'ar' ? 'فريق العمل' : 'Our Team'}</h2>
+                    <p className="text-[var(--text-soft)] text-lg max-w-2xl mx-auto">{language === 'ar' ? 'المطورون والباحثون خلف هذا النظام' : 'The developers and researchers behind this system'}</p>
                 </div>
                 <div className="flex flex-wrap justify-center gap-10">
                     {[
@@ -331,12 +337,12 @@ export function LandingPage() {
                         { name: 'الطالب الرابع', roleAr: 'محلل بيانات', roleEn: 'Data Analyst', img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=500&auto=format&fit=crop' },
                         { name: 'الدكتور المشرف', roleAr: 'المشرف الأكاديمي', roleEn: 'Academic Supervisor', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=500&auto=format&fit=crop' }
                     ].map((member, i) => (
-                        <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.1, duration: 0.5 }} className="flex flex-col items-center text-center group">
-                            <div className="relative w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-white/10 group-hover:border-[var(--primary)]/50 transition-colors duration-300">
-                                <img src={member.img} alt={member.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.1, duration: 0.5 }} className="flex flex-col items-center text-center">
+                            <div className="relative w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-[var(--card-border)] bg-[var(--surface-strong)] shadow-xl">
+                                <img src={member.img} alt={member.name} className="w-full h-full object-cover" />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
-                            <p className="text-[var(--primary)] text-sm">{language === 'ar' ? member.roleAr : member.roleEn}</p>
+                            <h3 className="text-xl font-bold text-[var(--text)] mb-1">{member.name}</h3>
+                            <p className="text-[var(--primary)] text-sm font-semibold">{language === 'ar' ? member.roleAr : member.roleEn}</p>
                         </motion.div>
                     ))}
                 </div>
@@ -348,7 +354,7 @@ export function LandingPage() {
                     initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}
                     className="inline-flex flex-col items-center"
                 >
-                    <h2 className="text-3xl md:text-5xl font-black text-white mb-8">{language === 'ar' ? 'هل أنت مستعد للتجربة؟' : 'Ready to experience it?'}</h2>
+                    <h2 className="text-3xl md:text-5xl font-black text-[var(--text)] mb-8">{language === 'ar' ? 'هل أنت مستعد للتجربة؟' : 'Ready to experience it?'}</h2>
                     <ButtonLink to={boot.auth.isAuthenticated ? '/upload' : '/register'} className="px-10 py-5 text-xl rounded-full shadow-[0_0_60px_rgba(var(--primary-rgb),0.3)] hover:scale-110 transition-transform duration-300">
                         <WandSparkles className="h-6 w-6 ltr:mr-2 rtl:ml-2" />
                         {language === 'ar' ? 'ابدأ التحليل الآن' : 'Start Analyzing Now'}
@@ -393,7 +399,7 @@ export function LoginPage() {
                             password: form.password,
                             remember: form.remember ? '1' : '0',
                         });
-                        setToast({ tone: 'success', message: payload.message ?? (language === 'ar' ? 'تم تسجيل الدخول.' : 'Signed in successfully.') });
+                        setToast({ tone: 'success', message: payload.message ?? (language === 'ar' ? 'تم تسجيل الدخول بنجاح.' : 'Signed in successfully.') });
                         const target = toAppPath(payload.redirect) || '/upload';
                         // استخدم إعادة تحميل كاملة لضمان تحديث جلسة Laravel وبيانات boot بدون انتظار إعادة الإقلاع داخل SPA
                         window.location.assign(target);
@@ -419,7 +425,7 @@ export function LoginPage() {
                         <button
                             type="button"
                             onClick={() => setPasswordVisible((value) => !value)}
-                            className="absolute inset-y-0 top-0 my-auto rounded-full text-[var(--text-muted)] transition hover:text-white ltr:right-4 rtl:left-4"
+                            className="absolute inset-y-0 top-0 my-auto rounded-full text-[var(--text-muted)] transition hover:text-[var(--text)] ltr:right-4 rtl:left-4"
                         >
                             {passwordVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </button>
@@ -427,7 +433,7 @@ export function LoginPage() {
                 </label>
                 <div className="flex items-center justify-between gap-4">
                     <label className="inline-flex items-center gap-3 text-sm text-[var(--text-soft)]">
-                        <input type="checkbox" checked={form.remember} onChange={(event) => setForm((current) => ({ ...current, remember: event.target.checked }))} className="h-4 w-4 rounded border-white/15 bg-transparent text-[var(--primary)] focus:ring-[rgb(var(--primary-rgb)/0.35)]" />
+                        <input type="checkbox" checked={form.remember} onChange={(event) => setForm((current) => ({ ...current, remember: event.target.checked }))} className="h-4 w-4 rounded border-[var(--line-strong)] bg-transparent text-[var(--primary)] focus:ring-[rgb(var(--primary-rgb)/0.35)]" />
                         {language === 'ar' ? 'تذكرني' : 'Remember me'}
                     </label>
                     <Link to="/forgot-password" className="text-sm font-semibold text-[var(--primary)] transition hover:text-[var(--primary-strong)]">
@@ -488,7 +494,7 @@ export function RegisterPage() {
                             password_confirmation: form.confirmPassword,
                             preferred_language: form.preferred_language,
                         });
-                        setToast({ tone: 'success', message: payload.message ?? (language === 'ar' ? 'تم إنشاء الحساب.' : 'Account created.') });
+                        setToast({ tone: 'success', message: payload.message ?? (language === 'ar' ? 'تم إنشاء الحساب بنجاح.' : 'Account created successfully.') });
                         const target = toAppPath(payload.redirect) || '/upload';
                         window.location.assign(target);
                     } catch (submissionError) {
@@ -625,7 +631,7 @@ export function VerifyEmailPage() {
                 description={copyFor(language, featureCopy)}
             />
             <SpotlightCard>
-                <div className="w-fit rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="w-fit rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] p-4">
                     <ShieldEllipsis className="h-6 w-6 text-[var(--primary)]" />
                 </div>
                 <h3 className="mt-5 text-2xl font-bold">{language === 'ar' ? 'الحالة الحالية' : 'Current state'}</h3>

@@ -347,7 +347,7 @@ export function UploadPage() {
             className="space-y-6 pb-12"
         >
             <PageHeader
-                className="!mb-4 !gap-4 border-b border-white/[0.08] !pb-4 xl:flex-row xl:items-start xl:justify-between"
+                className="!mb-4 !gap-4 border-b border-[var(--line)] !pb-4 xl:flex-row xl:items-start xl:justify-between"
                 eyebrow={language === 'ar' ? 'وحدة التحليل الذكية' : 'Smart Inference Module'}
                 title={language === 'ar' ? 'رفع العينات وتشغيل التحليل' : 'Upload & Run Inference'}
                 description={language === 'ar' ? 'قم برفع مقاطع الفيديو أو الصور الخاصة بك. سيقوم نظام الذكاء الاصطناعي الخاص بنا بتحليل كل ملف بدقة واستخراج المشاعر وعرض النتائج في لوحة تحكم متكاملة.' : 'Upload your video or image samples. Our AI system will deeply analyze each file, extract emotions, and present the results in an integrated dashboard.'}
@@ -371,7 +371,7 @@ export function UploadPage() {
                                     'group relative flex min-h-[200px] flex-1 items-center justify-center overflow-hidden rounded-[1.25rem] border-2 border-dashed transition-all duration-300 ease-out',
                                     dragActive
                                         ? 'scale-[1.02] border-[rgb(var(--primary-rgb)/0.8)] bg-[rgb(var(--primary-rgb)/0.12)] shadow-[0_0_30px_rgba(var(--primary-rgb),0.2)]'
-                                        : 'border-white/20 bg-black/40 hover:border-[rgb(var(--primary-rgb)/0.4)] hover:bg-black/60',
+                                        : 'border-[var(--line-strong)] bg-[var(--surface)] hover:border-[rgb(var(--primary-rgb)/0.4)] hover:bg-[var(--surface-strong)]',
                                 )}
                                 onDragOver={(event) => {
                                     event.preventDefault();
@@ -405,15 +405,15 @@ export function UploadPage() {
                                             dragActive && 'ring-4 ring-[rgb(var(--primary-rgb)/0.3)]',
                                         )}
                                     >
-                                        <UploadCloud className={`h-8 w-8 ${dragActive ? 'text-white' : 'text-[var(--primary)]'}`} />
+                                        <UploadCloud className={`h-8 w-8 ${dragActive ? 'text-[var(--text)]' : 'text-[var(--primary)]'}`} />
                                     </motion.div>
-                                    <h3 className="text-balance text-lg font-extrabold tracking-tight text-white">{language === 'ar' ? 'اسحب ملفاتك هنا' : 'Drag & Drop Files'}</h3>
-                                    <p className="body-soft mt-2 max-w-[240px] text-xs leading-relaxed text-white/60">
+                                    <h3 className="text-balance text-lg font-extrabold tracking-tight text-[var(--text)]">{language === 'ar' ? 'اسحب ملفاتك هنا' : 'Drag & Drop Files'}</h3>
+                                    <p className="body-soft mt-2 max-w-[240px] text-xs leading-relaxed text-[var(--text-soft)]">
                                         {language === 'ar' ? 'يدعم الفيديو والصور. يمكنك اختيار عدة ملفات معًا للتحليل المجمع.' : 'Supports video and images. Select multiple files for batch analysis.'}
                                     </p>
                                     <div className="mt-4 flex flex-wrap justify-center gap-1.5">
                                         {(['MP4', 'MOV', 'AVI', 'JPG', 'PNG'] as const).map((fmt) => (
-                                            <span key={fmt} className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 font-mono text-[9px] font-bold text-white/50 tracking-wider">{fmt}</span>
+                                            <span key={fmt} className="rounded-md border border-[var(--card-border)] bg-[var(--surface)] px-2 py-0.5 font-mono text-[9px] font-bold text-[var(--text-muted)] tracking-wider">{fmt}</span>
                                         ))}
                                     </div>
                                     <label className="button-primary mt-5 inline-flex cursor-pointer items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-[0_4px_15px_rgba(var(--primary-rgb),0.3)] transition-transform hover:scale-105 active:scale-95">
@@ -432,13 +432,13 @@ export function UploadPage() {
                                         exit={{ opacity: 0, height: 0, marginTop: 0 }}
                                         className="overflow-hidden"
                                     >
-                                        <div className="rounded-[1.5rem] border border-white/[0.08] bg-black/40 p-5 shadow-inner backdrop-blur-xl">
-                                            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-4">
+                                        <div className="rounded-[1.5rem] border border-[var(--line)] bg-[var(--surface)] p-5 shadow-inner backdrop-blur-xl">
+                                            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--line)] pb-4">
                                                 <div className="flex items-center gap-3">
                                                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgb(var(--primary-rgb)/0.2)] text-[var(--primary)] font-bold text-sm">
                                                         {files.length}
                                                     </div>
-                                                    <p className="text-sm font-bold text-white">
+                                                    <p className="text-sm font-bold text-[var(--text)]">
                                                         {language === 'ar' ? 'الملفات المحددة' : 'Selected Files'}
                                                     </p>
                                                 </div>
@@ -471,7 +471,7 @@ export function UploadPage() {
                                                         'group flex items-center gap-3 rounded-xl border p-2.5 transition-all duration-200',
                                                         active
                                                             ? 'border-[rgb(var(--primary-rgb)/0.5)] bg-[rgb(var(--primary-rgb)/0.15)] shadow-[0_4px_20px_rgba(var(--primary-rgb),0.1)]'
-                                                            : 'border-white/5 bg-white/[0.02] hover:border-white/15 hover:bg-white/[0.04]',
+                                                            : 'border-[var(--line)] bg-[var(--surface)] hover:border-[var(--line-strong)] hover:bg-[var(--surface-strong)]',
                                                     )}
                                                 >
                                                     <button
@@ -481,15 +481,15 @@ export function UploadPage() {
                                                     >
                                                         <span className={cx(
                                                             "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border shadow-sm transition-colors",
-                                                            active ? "border-[rgb(var(--primary-rgb)/0.4)] bg-[rgb(var(--primary-rgb)/0.2)] text-white" : "border-white/10 bg-black/50 text-white/60 group-hover:text-white"
+                                                            active ? "border-[rgb(var(--primary-rgb)/0.4)] bg-[rgb(var(--primary-rgb)/0.2)] text-[var(--text)]" : "border-[var(--card-border)] bg-[var(--surface-strong)] text-[var(--text-soft)] group-hover:text-[var(--text)]"
                                                         )}>
                                                             {isImg ? <ImageIcon className="h-4 w-4" /> : <Video className="h-4 w-4" />}
                                                         </span>
                                                         <div className="min-w-0 flex-1">
-                                                            <p className={cx("truncate text-xs font-bold transition-colors", active ? "text-white" : "text-white/80 group-hover:text-white")}>{queuedFile.name}</p>
-                                                            <div className="mt-0.5 flex items-center gap-2 text-[10px] font-medium text-white/50">
+                                                            <p className={cx("truncate text-xs font-bold transition-colors", active ? "text-[var(--text)]" : "text-[var(--text-soft)] group-hover:text-[var(--text)]")}>{queuedFile.name}</p>
+                                                            <div className="mt-0.5 flex items-center gap-2 text-[10px] font-medium text-[var(--text-muted)]">
                                                                 <span className="uppercase tracking-wider">{mediaLabel(language, queuedFile)}</span>
-                                                                <span className="h-1 w-1 rounded-full bg-white/20" />
+                                                                <span className="h-1 w-1 rounded-full bg-[var(--line)]" />
                                                                 <span>{`${(queuedFile.size / 1024 / 1024).toFixed(2)} MB`}</span>
                                                                 {active && (
                                                                     <>
@@ -502,7 +502,7 @@ export function UploadPage() {
                                                     </button>
                                                     <button
                                                         type="button"
-                                                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-white/40 opacity-0 transition-all hover:bg-rose-500/20 hover:text-rose-400 group-hover:opacity-100 disabled:opacity-50"
+                                                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-[var(--text-muted)] opacity-0 transition-all hover:bg-rose-500/20 hover:text-rose-400 group-hover:opacity-100 disabled:opacity-50"
                                                         onClick={() => removeQueuedFile(index)}
                                                         disabled={busy}
                                                     >
@@ -588,11 +588,11 @@ export function UploadPage() {
                                     <motion.div 
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 'auto' }}
-                                        className="border-t border-white/[0.06] bg-black/20"
+                                        className="border-t border-[var(--line)] bg-[var(--surface)]"
                                     >
                                         <div className="p-5 sm:p-6">
                                             <div className="mb-5 flex items-center justify-between">
-                                                <h3 className="text-base font-bold text-white">
+                                                <h3 className="text-base font-bold text-[var(--text)]">
                                                     {language === 'ar' ? 'تفاصيل النتيجة' : 'Result Details'}
                                                 </h3>
                                                 <Badge tone="success" text={language === 'ar' ? 'مكتمل' : 'Completed'} />
@@ -619,25 +619,25 @@ export function UploadPage() {
                             >
                                 <SpotlightCard className="relative overflow-hidden !p-5 ring-1 ring-[rgb(var(--primary-rgb)/0.3)]">
                                     <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(var(--primary-rgb),0.05)_50%,transparent_75%)] bg-[length:250%_250%] animate-[gradient-move_3s_linear_infinite]" />
-                                    <div className="relative z-10 flex items-center justify-between gap-4 border-b border-white/10 pb-4">
+                                    <div className="relative z-10 flex items-center justify-between gap-4 border-b border-[var(--card-border)] pb-4">
                                         <div className="flex items-center gap-3">
                                             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgb(var(--primary-rgb)/0.15)] ring-1 ring-[rgb(var(--primary-rgb)/0.3)]">
                                                 <LoaderCircle className="h-5 w-5 animate-spin text-[var(--primary)]" />
                                             </div>
                                             <div>
-                                                <h3 className="text-base font-extrabold text-white">{language === 'ar' ? 'جاري التحليل...' : 'Inference running...'}</h3>
-                                                <p className="text-xs font-medium text-white/60">
+                                                <h3 className="text-base font-extrabold text-[var(--text)]">{language === 'ar' ? 'جاري التحليل...' : 'Inference running...'}</h3>
+                                                <p className="text-xs font-medium text-[var(--text-soft)]">
                                                     {currentFileName ? (language === 'ar' ? `الملف: ${currentFileName}` : `Processing: ${currentFileName}`) : ''}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-end gap-0.5">
                                             <span className="text-xl font-black text-[var(--primary)]">{progress}%</span>
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">{language === 'ar' ? 'مكتمل' : 'Complete'}</span>
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">{language === 'ar' ? 'مكتمل' : 'Complete'}</span>
                                         </div>
                                     </div>
                                     <div className="relative z-10 mt-4">
-                                        <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-black/50 ring-1 ring-white/10">
+                                        <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-[var(--surface-strong)] ring-1 ring-white/10">
                                             <motion.div 
                                                 className="h-full bg-gradient-to-r from-[var(--secondary)] to-[var(--primary)]"
                                                 initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.3 }}
@@ -696,7 +696,7 @@ function InferenceStepHeader({
     stepTone: 'info' | 'success';
 }) {
     return (
-        <div className="relative z-[1] shrink-0 border-b border-white/[0.06] px-5 py-4 sm:px-6">
+        <div className="relative z-[1] shrink-0 border-b border-[var(--line)] px-5 py-4 sm:px-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-3">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-[rgb(var(--primary-rgb)/0.2)] bg-[rgb(var(--primary-rgb)/0.06)]">{icon}</span>
@@ -715,7 +715,7 @@ export function MediaPreviewViewport({ previewUrl, file }: { previewUrl: string;
     const isImage = file.type.startsWith('image');
 
     return (
-        <div className="relative flex w-full min-h-[16rem] items-center justify-center overflow-hidden rounded-xl bg-black/20">
+        <div className="relative flex w-full min-h-[16rem] items-center justify-center overflow-hidden rounded-xl bg-[var(--surface)]">
             <AnimatePresence mode="wait">
                 {isImage ? (
                     <motion.img
@@ -754,7 +754,7 @@ export function MediaPreviewViewport({ previewUrl, file }: { previewUrl: string;
 export function EmptyPreviewPlaceholder({ language }: { language: 'ar' | 'en' }) {
     return (
         <div className="relative z-[1] flex min-h-[16rem] flex-1 flex-col">
-            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border-2 border-dashed border-white/20 bg-black/40 shadow-inner">
+            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border-2 border-dashed border-[var(--line-strong)] bg-[var(--surface)] shadow-inner">
                 <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[length:24px_24px] opacity-50" />
                 
                 <div className="relative flex flex-1 flex-col items-center justify-center px-6 py-10 text-center z-10">
@@ -766,10 +766,10 @@ export function EmptyPreviewPlaceholder({ language }: { language: 'ar' | 'en' })
                         <ImageIcon className="h-8 w-8 text-[var(--primary)]" strokeWidth={1.5} />
                     </motion.div>
                     
-                    <h3 className="mt-2 max-w-md text-lg font-extrabold tracking-tight text-white">
+                    <h3 className="mt-2 max-w-md text-lg font-extrabold tracking-tight text-[var(--text)]">
                         {language === 'ar' ? 'مساحة العرض فارغة' : 'Viewport is empty'}
                     </h3>
-                    <p className="body-soft mt-2 max-w-sm text-xs leading-relaxed text-white/60">
+                    <p className="body-soft mt-2 max-w-sm text-xs leading-relaxed text-[var(--text-soft)]">
                         {language === 'ar'
                             ? 'بمجرد اختيارك للملفات، ستظهر معاينة الملف المحدد هنا.'
                             : 'Once you select files, the preview of the active file will appear here.'}
@@ -810,11 +810,11 @@ function BatchResultsSection({
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgb(var(--primary-rgb)/0.15)] text-[var(--primary)] ring-1 ring-[rgb(var(--primary-rgb)/0.3)]">
                         <CheckCircle2 className="h-5 w-5" />
                     </div>
-                    <h2 className="text-2xl font-extrabold sm:text-3xl text-white">
+                    <h2 className="text-2xl font-extrabold sm:text-3xl text-[var(--text)]">
                         {language === 'ar' ? 'نتائج التحليل' : 'Analysis Results'}
                     </h2>
                 </div>
-                <p className="body-soft text-sm text-white/60 ml-13">{buildBatchMessage(language, successCount, failedCount)}</p>
+                <p className="body-soft text-sm text-[var(--text-soft)] ml-13">{buildBatchMessage(language, successCount, failedCount)}</p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -841,7 +841,7 @@ function BatchResultsSection({
                                     'group relative flex flex-col overflow-hidden rounded-xl border p-4 text-left transition-all duration-300',
                                     active
                                         ? 'border-[rgb(var(--primary-rgb)/0.5)] bg-[rgb(var(--primary-rgb)/0.1)] shadow-[0_8px_24px_rgba(var(--primary-rgb),0.15)] scale-[1.02] ring-1 ring-[rgb(var(--primary-rgb)/0.4)]'
-                                        : 'border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04] hover:-translate-y-1 hover:shadow-lg',
+                                        : 'border-[var(--card-border)] bg-[var(--surface)] hover:border-[var(--line-strong)] hover:bg-[var(--surface-strong)] hover:-translate-y-1 hover:shadow-lg',
                                 )}
                             >
                                 {active && (
@@ -851,7 +851,7 @@ function BatchResultsSection({
                                 <div className="relative z-10 flex w-full items-start justify-between gap-3">
                                     <div className={cx(
                                         "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-colors",
-                                        active ? "border-[rgb(var(--primary-rgb)/0.4)] bg-[rgb(var(--primary-rgb)/0.2)] text-white" : "border-white/10 bg-black/40 text-white/70"
+                                        active ? "border-[rgb(var(--primary-rgb)/0.4)] bg-[rgb(var(--primary-rgb)/0.2)] text-[var(--text)]" : "border-[var(--card-border)] bg-[var(--surface)] text-[var(--text-soft)]"
                                     )}>
                                         {analysis.mediaType === 'image' ? <ImageIcon className="h-4 w-4" /> : <Video className="h-4 w-4" />}
                                     </div>
@@ -862,19 +862,19 @@ function BatchResultsSection({
                                 </div>
 
                                 <div className="relative z-10 mt-3 min-w-0 flex-1">
-                                    <p className={cx("truncate text-sm font-bold transition-colors", active ? "text-white" : "text-white/90")} title={analysis.fileName}>{analysis.fileName}</p>
-                                    <p className="body-soft mt-1 line-clamp-2 text-xs leading-relaxed text-white/60">
+                                    <p className={cx("truncate text-sm font-bold transition-colors", active ? "text-[var(--text)]" : "text-[var(--text)]")} title={analysis.fileName}>{analysis.fileName}</p>
+                                    <p className="body-soft mt-1 line-clamp-2 text-xs leading-relaxed text-[var(--text-soft)]">
                                         {copyFor(language, analysis.summary)}
                                     </p>
                                 </div>
 
-                                <div className="relative z-10 mt-4 flex w-full items-center justify-between border-t border-white/10 pt-3">
-                                    <div className="flex items-center gap-2.5 text-[10px] font-medium text-white/50">
+                                <div className="relative z-10 mt-4 flex w-full items-center justify-between border-t border-[var(--card-border)] pt-3">
+                                    <div className="flex items-center gap-2.5 text-[10px] font-medium text-[var(--text-muted)]">
                                         <div className="flex items-center gap-1">
-                                            <Sparkles className={cx("h-3 w-3", active ? "text-[var(--primary)]" : "text-white/40")} />
-                                            <span className={cx(isSuccess ? "text-white" : "")}>{analysis.confidence.toFixed(1)}%</span>
+                                            <Sparkles className={cx("h-3 w-3", active ? "text-[var(--primary)]" : "text-[var(--text-muted)]")} />
+                                            <span className={cx(isSuccess ? "text-[var(--text)]" : "")}>{analysis.confidence.toFixed(1)}%</span>
                                         </div>
-                                        <div className="h-1 w-1 rounded-full bg-white/20" />
+                                        <div className="h-1 w-1 rounded-full bg-[var(--line)]" />
                                         <div className="flex items-center gap-1">
                                             <span>{analysis.latencyMs} ms</span>
                                         </div>
@@ -884,7 +884,7 @@ function BatchResultsSection({
                                         "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[10px] font-bold transition-colors",
                                         active 
                                             ? "bg-[rgb(var(--primary-rgb)/0.2)] text-[var(--primary)]" 
-                                            : "bg-white/10 text-white/80 group-hover:bg-white/20 group-hover:text-white"
+                                            : "bg-[var(--surface-strong)] text-[var(--text-soft)] group-hover:bg-[var(--line)] group-hover:text-[var(--text)]"
                                     )}>
                                         <Play className="h-2.5 w-2.5 fill-current" />
                                         <span>{language === 'ar' ? 'عرض' : 'View'}</span>
@@ -910,14 +910,14 @@ export function ResultsSection({ analysis, showHeader = false, showHero = true, 
         <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={cx('mt-8', showHeader ? 'border-t border-white/[0.08] pt-8' : '')}
+            className={cx('mt-8', showHeader ? 'border-t border-[var(--line)] pt-8' : '')}
         >
             {showHeader && (
                 <div className="mb-6 flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[rgb(var(--primary-rgb)/0.15)] text-[var(--primary)] ring-1 ring-[rgb(var(--primary-rgb)/0.3)]">
                         <Sparkles className="h-5 w-5" />
                     </div>
-                    <h2 className="text-2xl font-extrabold sm:text-3xl text-white">
+                    <h2 className="text-2xl font-extrabold sm:text-3xl text-[var(--text)]">
                         {language === 'ar' ? 'التقرير المفصل' : 'Detailed Report'}
                     </h2>
                 </div>

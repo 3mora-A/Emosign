@@ -85,15 +85,13 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
 
     return (
         <Link to="/" className="group flex items-center gap-3">
-            <div className="panel-strong flex h-11 w-11 items-center justify-center rounded-2xl border border-white/[0.09] shadow-[0_8px_28px_-6px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.06] transition-transform duration-300 group-hover:scale-[1.03]">
-                <Sparkles className="h-5 w-5 text-[var(--primary)]" />
+            <div className="flex h-14 w-14 md:h-16 md:w-16 items-center justify-center transition-transform duration-300 group-hover:scale-[1.03] shrink-0">
+                <img src="/images/logo.png" alt="EmoSign Logo" className="h-full w-full object-contain drop-shadow-[0_0_10px_rgba(147,51,234,0.4)]" />
             </div>
-            {!compact ? (
-                <div className="leading-tight transition-opacity group-hover:opacity-95">
-                    <div className="text-xs font-bold uppercase tracking-[0.22em] text-[rgb(var(--primary-rgb)/0.75)] sm:text-sm sm:tracking-[0.28em]">Deep Learning System</div>
-                    <div className="text-lg font-extrabold text-gradient">{language === 'ar' ? 'تحليل المشاعر' : 'Emotion Analysis'}</div>
-                </div>
-            ) : null}
+            <div className={cx("leading-tight transition-opacity group-hover:opacity-95", compact ? "hidden lg:block" : "block")}>
+                <div className="text-xs font-bold uppercase tracking-[0.22em] text-[rgb(var(--primary-rgb)/0.75)] sm:text-sm sm:tracking-[0.28em]">EmoSign</div>
+                <div className="text-lg font-extrabold text-gradient whitespace-nowrap">{language === 'ar' ? 'تحليل المشاعر' : 'Emotion Analysis'}</div>
+            </div>
         </Link>
     );
 }
@@ -240,7 +238,7 @@ export function StatCard({
 }) {
     return (
         <SpotlightCard className="min-h-[180px]">
-            <div className="mb-6 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-white/[0.08] via-white/[0.02] to-transparent p-3 shadow-inner ring-1 ring-white/[0.04]">
+            <div className="mb-6 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-[var(--primary)]/10 via-[var(--primary)]/5 to-transparent p-3 shadow-inner ring-1 ring-[var(--line)]">
                 <AppIcon name={icon} className="h-5 w-5 text-[var(--primary)]" />
             </div>
             <p className="body-muted text-sm uppercase tracking-[0.24em]">{label}</p>
@@ -319,7 +317,7 @@ export function OptionGridField({
                                 'rounded-[1.2rem] border px-4 py-3 text-sm font-semibold transition',
                                 active
                                     ? 'bg-[rgb(var(--primary-rgb)/0.14)] text-[var(--text)] border-[rgb(var(--primary-rgb)/0.38)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]'
-                                    : 'bg-white/[0.03] text-[var(--text-soft)] border-white/10 hover:bg-white/[0.05] hover:text-[var(--text)]',
+                                    : 'bg-[var(--surface)] text-[var(--text-soft)] border-[var(--card-border)] hover:bg-[var(--surface-strong)] hover:text-[var(--text)]',
                             )}
                         >
                             {option.label}
@@ -370,8 +368,8 @@ export function ToggleCard({
             <span
                 dir="ltr"
                 className={cx(
-                    'inline-flex h-8 w-[3.35rem] shrink-0 items-center overflow-hidden rounded-full border border-white/10 p-1 transition',
-                    checked ? 'justify-end bg-[rgb(var(--secondary-rgb)/0.72)]' : 'justify-start bg-white/10',
+                    'inline-flex h-8 w-[3.35rem] shrink-0 items-center overflow-hidden rounded-full border border-[var(--card-border)] p-1 transition',
+                    checked ? 'justify-end bg-[rgb(var(--secondary-rgb)/0.72)]' : 'justify-start bg-[var(--surface-strong)]',
                 )}
             >
                 <span className="block h-6 w-6 rounded-full bg-white shadow-[0_2px_10px_rgba(0,0,0,0.16)] transition-transform" />
@@ -387,7 +385,7 @@ export function ConfidenceBar({ label, value }: { label: string; value: number }
                 <span className="body-soft">{label}</span>
                 <span className="font-bold text-[var(--primary)]">{value.toFixed(1)}%</span>
             </div>
-            <div className="h-3 overflow-hidden rounded-full bg-white/6">
+            <div className="h-3 overflow-hidden rounded-full bg-[var(--surface-strong)]">
                 <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${Math.max(4, Math.min(100, value))}%` }}
@@ -416,7 +414,7 @@ export function ProgressTimeline({
 
                 return (
                     <div key={step.label} className="panel-soft flex items-start gap-3 rounded-xl p-3">
-                        <div className={cx('mt-0.5 rounded-full p-1.5', done ? 'bg-[rgb(var(--primary-rgb)/0.18)] text-[var(--primary)]' : current ? 'bg-[rgb(var(--secondary-rgb)/0.18)] text-[var(--secondary)]' : 'bg-white/5 text-[var(--text-muted)]')}>
+                        <div className={cx('mt-0.5 rounded-full p-1.5', done ? 'bg-[rgb(var(--primary-rgb)/0.18)] text-[var(--primary)]' : current ? 'bg-[rgb(var(--secondary-rgb)/0.18)] text-[var(--secondary)]' : 'bg-[var(--surface)] text-[var(--text-muted)]')}>
                             {done ? (
                                 <CheckCircle2 className="h-3.5 w-3.5" />
                             ) : current ? (
@@ -595,7 +593,7 @@ function PublicLinks({ items, onNavigate }: { items: NavItem[]; onNavigate?: () 
                             }
                             if (onNavigate) onNavigate();
                         }}
-                        className="rounded-full px-4 py-2 text-sm font-semibold transition text-[var(--text-soft)] hover:bg-white/[0.06] hover:text-white"
+                        className="rounded-full px-4 py-2 text-sm font-semibold transition text-[var(--text-soft)] hover:bg-[var(--surface-strong)] hover:text-[var(--text)]"
                     >
                         {copyFor(language, item.label)}
                     </NavLink>
@@ -610,7 +608,7 @@ export function Navbar() {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     return (
-        <header className="sticky top-0 z-40 border-b border-white/[0.07] bg-gradient-to-b from-[rgba(14,10,10,0.88)] via-[rgba(12,9,9,0.72)] to-[rgba(10,8,8,0.55)] backdrop-blur-2xl shadow-[0_4px_36px_-10px_rgba(0,0,0,0.55)]">
+        <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--bg-elevated)] backdrop-blur-2xl shadow-[0_4px_36px_-10px_rgba(0,0,0,0.1)]">
             <div className="app-container flex h-20 items-center justify-between gap-4">
                 <BrandMark />
                 <nav className="hidden items-center gap-2 lg:flex">
@@ -643,7 +641,7 @@ export function Navbar() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden border-t border-white/5 lg:hidden"
+                        className="overflow-hidden border-t border-[var(--line)] lg:hidden"
                     >
                         <div className="app-container flex flex-col gap-2 py-4">
                             <PublicLinks items={publicNav} onNavigate={() => setMobileOpen(false)} />
@@ -675,7 +673,7 @@ export function Navbar() {
 export function Footer() {
     const { language } = useAppContext();
     return (
-        <footer className="relative mt-auto border-t border-white/[0.07] bg-gradient-to-t from-black/25 via-transparent to-transparent py-10">
+        <footer className="relative mt-auto border-t border-[var(--line)] bg-gradient-to-t from-[var(--surface)] via-transparent to-transparent py-10">
             <div className="app-container flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <BrandMark compact />
                 <p className="body-soft text-sm">
@@ -739,13 +737,13 @@ export function DashboardFrame({ children }: { children: ReactNode }) {
                 initial={false}
                 animate={mobileOpen ? { x: 0 } : { x: 0 }}
                 className={cx(
-                    'panel dashboard-sidebar-mobile flex shrink-0 flex-col rounded-[2rem] border-white/[0.08] p-5 shadow-[0_24px_64px_-20px_rgba(0,0,0,0.5)] ring-1 ring-black/20 lg:hidden',
+                    'panel dashboard-sidebar-mobile flex shrink-0 flex-col rounded-[2rem] border-[var(--card-border)] p-5 shadow-[0_24px_64px_-20px_rgba(0,0,0,0.1)] ring-1 ring-[var(--line)] lg:hidden',
                     mobileOpen ? 'translate-x-0' : 'ltr:-translate-x-[120%] rtl:translate-x-[120%]',
                     'transition-transform duration-300',
                 )}
             >
                 <div className="flex items-center justify-between">
-                    <BrandMark compact />
+                    <BrandMark compact={false} />
                     <ActionButton variant="ghost" className="h-10 w-10 shrink-0 rounded-2xl px-0 text-[var(--primary)] lg:hidden" onClick={() => setMobileOpen(false)}>
                         <X className="h-5 w-5 shrink-0 text-[var(--primary)]" strokeWidth={2.2} />
                     </ActionButton>
@@ -770,7 +768,7 @@ export function DashboardFrame({ children }: { children: ReactNode }) {
                             <p className="text-sm font-bold">{boot.auth.user?.name ?? 'Guest User'}</p>
                             <p className="body-soft text-xs">{boot.auth.user?.email ?? 'visitor@example.com'}</p>
                         </div>
-                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-sm font-bold">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] text-sm font-bold">
                             {initials(boot.auth.user?.name)}
                         </div>
                     </div>
@@ -788,11 +786,11 @@ export function DashboardFrame({ children }: { children: ReactNode }) {
 
             <div key={direction} className={cx('dashboard-shell', direction === 'rtl' ? 'lg:flex-row-reverse' : 'lg:flex-row')} dir="ltr">
             <aside
-                className="panel dashboard-sidebar-desktop hidden shrink-0 flex-col rounded-[2rem] border-white/[0.08] p-5 shadow-[0_24px_64px_-28px_rgba(0,0,0,0.45)] ring-1 ring-white/[0.04] lg:flex lg:h-[calc(100vh-3rem)]"
+                className="panel dashboard-sidebar-desktop hidden shrink-0 flex-col rounded-[2rem] border-[var(--card-border)] p-5 shadow-[0_24px_64px_-28px_rgba(0,0,0,0.1)] ring-1 ring-[var(--line)] lg:flex lg:h-[calc(100vh-3rem)]"
                 dir={direction}
             >
                 <div className="flex items-center justify-between">
-                    <BrandMark compact />
+                    <BrandMark compact={false} />
                 </div>
                 <div className="mt-8 space-y-1.5">
                     {navItems.map((item) => (
@@ -813,7 +811,7 @@ export function DashboardFrame({ children }: { children: ReactNode }) {
                             <p className="text-sm font-bold">{boot.auth.user?.name ?? 'Guest User'}</p>
                             <p className="body-soft text-xs">{boot.auth.user?.email ?? 'visitor@example.com'}</p>
                         </div>
-                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-sm font-bold">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] text-sm font-bold">
                             {initials(boot.auth.user?.name)}
                         </div>
                     </div>
@@ -863,7 +861,7 @@ export function PageHeader({
     className?: string;
 }) {
     return (
-        <motion.div variants={pageTransition} className={cx('mb-10 flex flex-col gap-6 border-b border-white/[0.06] pb-10 xl:flex-row xl:items-end xl:justify-between', className)}>
+        <motion.div variants={pageTransition} className={cx('mb-10 flex flex-col gap-6 border-b border-[var(--line)] pb-10 xl:flex-row xl:items-end xl:justify-between', className)}>
             <div className="max-w-3xl">
                 {eyebrow ? <div className="eyebrow">{eyebrow}</div> : null}
                 <h1 className="page-title mt-4 text-balance">{title}</h1>
@@ -884,7 +882,7 @@ export function InsightRow({
     tone?: Tone;
 }) {
     return (
-        <div className="panel-soft flex items-center justify-between gap-3 rounded-2xl border border-white/[0.04] px-4 py-3 transition-colors hover:border-[rgb(var(--primary-rgb)/0.14)]">
+        <div className="panel-soft flex items-center justify-between gap-3 rounded-2xl border border-[var(--card-border)] px-4 py-3 transition-colors hover:border-[rgb(var(--primary-rgb)/0.14)]">
             <span className="body-soft text-sm">{label}</span>
             <Badge tone={tone} text={value} />
         </div>
@@ -897,7 +895,7 @@ export function AnalysisHeroCard({ analysis }: { analysis: AnalysisResult }) {
     return (
         <SpotlightCard className="relative overflow-hidden !p-0 shadow-[0_24px_80px_-16px_rgba(0,0,0,0.45)]">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_30%_0%,rgb(var(--primary-rgb)/0.12),transparent_60%)]" />
-            <div className="relative border-b border-white/[0.06] p-6 sm:p-8 xl:p-10">
+            <div className="relative border-b border-[var(--line)] p-6 sm:p-8 xl:p-10">
                 <div className="flex flex-wrap items-start justify-between gap-6">
                     <div className="max-w-2xl flex-1">
                         <p className="text-[0.6875rem] font-bold uppercase tracking-[0.2em] text-[var(--text-muted)]">
@@ -917,7 +915,7 @@ export function AnalysisHeroCard({ analysis }: { analysis: AnalysisResult }) {
                 </div>
             </div>
 
-            <div className="relative bg-black/20 p-6 sm:p-8 xl:px-10">
+            <div className="relative bg-[var(--surface)] p-6 sm:p-8 xl:px-10">
                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 xl:gap-8 xl:items-center">
                     <InsightRow label={language === 'ar' ? 'الحالة الشعورية' : 'Emotional state'} value={copyFor(language, analysis.emotionLabel)} tone="info" />
                     <InsightRow label={language === 'ar' ? 'زمن التحليل' : 'Latency'} value={`${formatNumber(language, analysis.latencyMs)} ms`} tone="warning" />
@@ -947,7 +945,7 @@ export function ToastBanner() {
                             {toast.tone === 'success' ? <CheckCircle2 className="h-4 w-4" /> : toast.tone === 'error' ? <CircleAlert className="h-4 w-4" /> : <AudioLines className="h-4 w-4" />}
                         </div>
                         <p className="flex-1 text-sm font-semibold leading-7">{toast.message}</p>
-                        <button type="button" onClick={() => setToast(null)} className="rounded-full p-1 text-[var(--text-muted)] transition hover:text-white">
+                        <button type="button" onClick={() => setToast(null)} className="rounded-full p-1 text-[var(--text-muted)] transition hover:text-[var(--text)]">
                             <X className="h-4 w-4" />
                         </button>
                     </div>
@@ -959,9 +957,9 @@ export function ToastBanner() {
 
 export function LoadingPanel({ title, description }: { title: string; description: string }) {
     return (
-        <div className="panel rounded-[1.85rem] border border-white/[0.06] p-6 shadow-inner">
+        <div className="panel rounded-[1.85rem] border border-[var(--card-border)] p-6 shadow-inner">
             <div className="flex items-center gap-4">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                <div className="rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] p-3">
                     <LoaderCircle className="h-5 w-5 animate-spin text-[var(--primary)]" />
                 </div>
                 <div>
