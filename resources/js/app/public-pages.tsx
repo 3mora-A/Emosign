@@ -63,7 +63,12 @@ function AuthShell({
     return (
         <div className="app-container section-shell">
             <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-                <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate" className="panel relative overflow-hidden rounded-[2rem] p-7 md:p-10">
+                <motion.div 
+                    variants={motionVariants.pageTransition} 
+                    initial="initial" 
+                    animate="animate" 
+                    className="panel relative overflow-hidden rounded-[2rem] p-7 md:p-10 perspective-[1000px]"
+                >
                     <div className="hero-mesh" />
                     <div className="relative z-10">
                         <div className="eyebrow">{language === 'ar' ? 'الوصول إلى النظام' : 'Access the system'}</div>
@@ -71,17 +76,24 @@ function AuthShell({
                         <p className="body-soft mt-5 max-w-2xl text-lg leading-8">{subtitle}</p>
 
                         <div className="mt-10 data-grid">
-                            {landingHighlights.map((item) => (
-                                <SpotlightCard key={copyFor(language, item.title)} className="min-h-[190px] relative overflow-hidden group">
-                                    {/* Abstract background shape for visual interest */}
-                                    <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[var(--primary)]/10 rounded-full blur-2xl group-hover:bg-[var(--primary)]/20 transition-colors duration-500" />
-                                    
-                                    <div className="mb-4 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-[var(--primary)]/10 via-[var(--primary)]/5 to-transparent p-3 shadow-inner ring-1 ring-[var(--line)] relative z-10">
-                                        <AppIcon name={item.icon} className="h-5 w-5 text-[var(--primary)]" />
-                                    </div>
-                                    <h3 className="text-xl font-bold relative z-10">{copyFor(language, item.title)}</h3>
-                                    <p className="body-soft mt-3 leading-7 relative z-10">{copyFor(language, item.description)}</p>
-                                </SpotlightCard>
+                            {landingHighlights.map((item, i) => (
+                                <motion.div 
+                                    key={copyFor(language, item.title)}
+                                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.2 + (i * 0.1) }}
+                                >
+                                    <SpotlightCard className="min-h-[190px] relative overflow-hidden group h-full">
+                                        {/* Abstract background shape for visual interest */}
+                                        <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[var(--primary)]/10 rounded-full blur-2xl group-hover:bg-[var(--primary)]/20 group-hover:scale-150 transition-all duration-700" />
+                                        
+                                        <div className="mb-4 inline-flex rounded-2xl border border-[rgb(var(--primary-rgb)/0.12)] bg-gradient-to-br from-[var(--primary)]/10 via-[var(--primary)]/5 to-transparent p-3 shadow-inner ring-1 ring-[var(--line)] relative z-10">
+                                            <AppIcon name={item.icon} className="h-5 w-5 text-[var(--primary)]" />
+                                        </div>
+                                        <h3 className="text-xl font-bold relative z-10">{copyFor(language, item.title)}</h3>
+                                        <p className="body-soft mt-3 leading-7 relative z-10">{copyFor(language, item.description)}</p>
+                                    </SpotlightCard>
+                                </motion.div>
                             ))}
                         </div>
                     </div>
@@ -129,9 +141,9 @@ export function LandingPage() {
 
                 <div className="app-container grid lg:grid-cols-2 gap-16 items-center">
                     <motion.div
-                        initial={{ opacity: 0, x: language === 'ar' ? 50 : -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        initial={{ opacity: 0, x: language === 'ar' ? 50 : -50, scale: 0.9 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
                         className="relative z-10"
                     >
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)] text-sm font-bold mb-8">
@@ -162,10 +174,10 @@ export function LandingPage() {
                     </motion.div>
 
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1, delay: 0.2 }}
-                        className="relative h-[400px] sm:h-[500px] lg:h-[600px] w-full z-10 mt-10 lg:mt-0"
+                        initial={{ opacity: 0, scale: 0.8, rotateY: language === 'ar' ? -20 : 20 }}
+                        animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                        transition={{ type: "spring", stiffness: 80, damping: 20, delay: 0.3 }}
+                        className="relative h-[400px] sm:h-[500px] lg:h-[600px] w-full z-10 mt-10 lg:mt-0 perspective-[1000px]"
                     >
                         <div className="absolute inset-0 rounded-[3rem] overflow-hidden border border-[var(--card-border)] shadow-2xl bg-[var(--surface-strong)]">
                             <img src="/images/hero-face.png" alt="AI Face Analysis" className="w-full h-full object-cover opacity-100" />
@@ -213,7 +225,15 @@ export function LandingPage() {
                             img: 'https://bluesoft.com/wp-content/uploads/2024/11/machine-learning.jpg'
                         }
                     ].map((step, i) => (
-                        <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.2, duration: 0.5 }} className="relative z-10 flex flex-col bg-gradient-to-b from-[var(--surface)] to-[var(--surface-strong)] backdrop-blur-sm border border-[var(--card-border)] rounded-3xl overflow-hidden shadow-xl">
+                        <motion.div 
+                            key={i} 
+                            initial={{ opacity: 0, y: 50, scale: 0.9 }} 
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }} 
+                            viewport={{ once: true, margin: "-50px" }} 
+                            transition={{ type: "spring", stiffness: 100, damping: 15, delay: i * 0.15 }} 
+                            whileHover={{ y: -10, scale: 1.02, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                            className="relative z-10 flex flex-col bg-gradient-to-b from-[var(--surface)] to-[var(--surface-strong)] backdrop-blur-sm border border-[var(--card-border)] rounded-3xl overflow-hidden shadow-xl"
+                        >
                             {/* Image Header */}
                             <div className="relative h-48 w-full overflow-visible">
                                 <div className="absolute inset-0 overflow-hidden">
@@ -250,8 +270,12 @@ export function LandingPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
                     {/* Large Card */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}
-                        className="md:col-span-2 md:row-span-2 relative rounded-[2.5rem] overflow-hidden shadow-xl bg-gradient-to-br from-[var(--surface-strong)] to-[var(--primary)]/10 border border-[var(--card-border)]"
+                        initial={{ opacity: 0, scale: 0.9, rotateX: 10 }} 
+                        whileInView={{ opacity: 1, scale: 1, rotateX: 0 }} 
+                        viewport={{ once: true, margin: "-50px" }} 
+                        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                        whileHover={{ scale: 1.02, rotateX: 2, rotateY: language === 'ar' ? -2 : 2, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                        className="md:col-span-2 md:row-span-2 relative rounded-[2.5rem] overflow-hidden shadow-xl bg-gradient-to-br from-[var(--surface-strong)] to-[var(--primary)]/10 border border-[var(--card-border)] perspective-[1000px]"
                     >
                         <img src="/images/sign-language-ai.png" alt="Sign Language AI Tracking" className="absolute inset-0 w-full h-full object-cover opacity-80" />
                         <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-strong)] via-[var(--surface-strong)]/40 to-transparent" />
@@ -263,8 +287,12 @@ export function LandingPage() {
 
                     {/* Small Card 1 */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.2, duration: 0.5 }}
-                        className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[var(--surface)] to-[var(--primary)]/5 border border-[var(--card-border)] p-8 flex flex-col justify-center items-center text-center shadow-xl"
+                        initial={{ opacity: 0, scale: 0.9, rotateX: 10 }} 
+                        whileInView={{ opacity: 1, scale: 1, rotateX: 0 }} 
+                        viewport={{ once: true, margin: "-50px" }} 
+                        transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.15 }}
+                        whileHover={{ scale: 1.05, y: -5, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                        className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[var(--surface)] to-[var(--primary)]/5 border border-[var(--card-border)] p-8 flex flex-col justify-center items-center text-center shadow-xl perspective-[1000px]"
                     >
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgb(var(--primary-rgb)/0.1),transparent_70%)] opacity-50" />
                         <ScanFace className="h-16 w-16 text-[var(--primary)] mb-6" />
@@ -274,8 +302,12 @@ export function LandingPage() {
 
                     {/* Small Card 2 */}
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.4, duration: 0.5 }}
-                        className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[var(--surface)] to-[var(--accent)]/5 border border-[var(--card-border)] p-8 flex flex-col justify-center items-center text-center shadow-xl"
+                        initial={{ opacity: 0, scale: 0.9, rotateX: 10 }} 
+                        whileInView={{ opacity: 1, scale: 1, rotateX: 0 }} 
+                        viewport={{ once: true, margin: "-50px" }} 
+                        transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.3 }}
+                        whileHover={{ scale: 1.05, y: -5, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                        className="relative rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-[var(--surface)] to-[var(--accent)]/5 border border-[var(--card-border)] p-8 flex flex-col justify-center items-center text-center shadow-xl perspective-[1000px]"
                     >
                         <div className="flex gap-4 mb-6">
                             <PlaySquare className="h-12 w-12 text-[var(--primary)]" />
@@ -298,19 +330,37 @@ export function LandingPage() {
                         <h2 className="text-4xl md:text-5xl font-black text-[var(--text)] mb-16">{language === 'ar' ? 'أرقام تتحدث عن نفسها' : 'Numbers That Speak'}</h2>
                         
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 divide-y md:divide-y-0 md:divide-x divide-[var(--line)] rtl:divide-x-reverse">
-                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }} className="flex flex-col items-center justify-center pt-6 md:pt-0">
+                            <motion.div 
+                                initial={{ scale: 0.5, opacity: 0, y: 30 }} 
+                                whileInView={{ scale: 1, opacity: 1, y: 0 }} 
+                                viewport={{ once: true, margin: "-50px" }} 
+                                transition={{ type: "spring", stiffness: 150, damping: 15 }} 
+                                className="flex flex-col items-center justify-center pt-6 md:pt-0"
+                            >
                                 <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[var(--primary)] to-[var(--secondary)] mb-4">85%</div>
                                 <p className="text-xl text-[var(--text)] font-bold mb-2">{language === 'ar' ? 'دقة التعرف' : 'Recognition Accuracy'}</p>
                                 <p className="text-[var(--text-soft)] text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط الدقة في ظروف الإضاءة الطبيعية' : 'Average accuracy in natural lighting conditions'}</p>
                             </motion.div>
                             
-                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.2, duration: 0.5 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
+                            <motion.div 
+                                initial={{ scale: 0.5, opacity: 0, y: 30 }} 
+                                whileInView={{ scale: 1, opacity: 1, y: 0 }} 
+                                viewport={{ once: true, margin: "-50px" }} 
+                                transition={{ type: "spring", stiffness: 150, damping: 15, delay: 0.15 }} 
+                                className="flex flex-col items-center justify-center pt-10 md:pt-0"
+                            >
                                 <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[var(--primary)] to-[var(--secondary)] mb-4">0.5s</div>
                                 <p className="text-xl text-[var(--text)] font-bold mb-2">{language === 'ar' ? 'سرعة الاستجابة' : 'Response Time'}</p>
                                 <p className="text-[var(--text-soft)] text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'متوسط زمن المعالجة للطلب الواحد' : 'Average processing time per request'}</p>
                             </motion.div>
 
-                            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.4, duration: 0.5 }} className="flex flex-col items-center justify-center pt-10 md:pt-0">
+                            <motion.div 
+                                initial={{ scale: 0.5, opacity: 0, y: 30 }} 
+                                whileInView={{ scale: 1, opacity: 1, y: 0 }} 
+                                viewport={{ once: true, margin: "-50px" }} 
+                                transition={{ type: "spring", stiffness: 150, damping: 15, delay: 0.3 }} 
+                                className="flex flex-col items-center justify-center pt-10 md:pt-0"
+                            >
                                 <div className="text-6xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-[var(--primary)] to-[var(--secondary)] mb-4">500+</div>
                                 <p className="text-xl text-[var(--text)] font-bold mb-2">{language === 'ar' ? 'عينة اختبار' : 'Test Samples'}</p>
                                 <p className="text-[var(--text-soft)] text-sm max-w-[200px] mx-auto">{language === 'ar' ? 'تم اختبارها بنجاح على النظام' : 'Successfully tested on the system'}</p>
@@ -335,7 +385,15 @@ export function LandingPage() {
                         { name: 'الطالب الرابع', roleAr: 'محلل بيانات', roleEn: 'Data Analyst', img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=500&auto=format&fit=crop' },
                         { name: 'الدكتور المشرف', roleAr: 'المشرف الأكاديمي', roleEn: 'Academic Supervisor', img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=500&auto=format&fit=crop' }
                     ].map((member, i) => (
-                        <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.1, duration: 0.5 }} className="flex flex-col items-center text-center">
+                        <motion.div 
+                            key={i} 
+                            initial={{ opacity: 0, scale: 0.5, y: 40 }} 
+                            whileInView={{ opacity: 1, scale: 1, y: 0 }} 
+                            viewport={{ once: true, margin: "-50px" }} 
+                            transition={{ type: "spring", stiffness: 120, damping: 12, delay: i * 0.1 }} 
+                            whileHover={{ y: -10, scale: 1.05, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+                            className="flex flex-col items-center text-center cursor-pointer"
+                        >
                             <div className="relative w-40 h-40 rounded-full overflow-hidden mb-6 border-4 border-[var(--card-border)] bg-[var(--surface-strong)] shadow-xl">
                                 <img src={member.img} alt={member.name} className="w-full h-full object-cover" />
                             </div>
@@ -349,7 +407,10 @@ export function LandingPage() {
             {/* CTA */}
             <section className="app-container text-center pb-10">
                 <motion.div 
-                    initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.5 }}
+                    initial={{ opacity: 0, scale: 0.8, y: 50 }} 
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }} 
+                    viewport={{ once: true, margin: "-50px" }} 
+                    transition={{ type: "spring", stiffness: 100, damping: 15 }}
                     className="inline-flex flex-col items-center"
                 >
                     <h2 className="text-3xl md:text-5xl font-black text-[var(--text)] mb-8">{language === 'ar' ? 'هل أنت مستعد للتجربة؟' : 'Ready to experience it?'}</h2>
@@ -397,7 +458,7 @@ export function LoginPage() {
                             password: form.password,
                             remember: form.remember ? '1' : '0',
                         });
-                        setToast({ tone: 'success', message: payload.message ?? (language === 'ar' ? 'تم تسجيل الدخول بنجاح.' : 'Signed in successfully.') });
+                        // setToast({ tone: 'success', message: payload.message ?? (language === 'ar' ? 'تم تسجيل الدخول بنجاح.' : 'Signed in successfully.') });
                         const target = toAppPath(payload.redirect) || '/upload';
                         // استخدم إعادة تحميل كاملة لضمان تحديث جلسة Laravel وبيانات boot بدون انتظار إعادة الإقلاع داخل SPA
                         window.location.assign(target);
@@ -492,7 +553,7 @@ export function RegisterPage() {
                             password_confirmation: form.confirmPassword,
                             preferred_language: form.preferred_language,
                         });
-                        setToast({ tone: 'success', message: payload.message ?? (language === 'ar' ? 'تم إنشاء الحساب بنجاح.' : 'Account created successfully.') });
+                        // setToast({ tone: 'success', message: payload.message ?? (language === 'ar' ? 'تم إنشاء الحساب بنجاح.' : 'Account created successfully.') });
                         const target = toAppPath(payload.redirect) || '/upload';
                         window.location.assign(target);
                     } catch (submissionError) {

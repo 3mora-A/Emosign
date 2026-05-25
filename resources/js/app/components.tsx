@@ -62,9 +62,27 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 const pageTransition: Variants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const } },
-    exit: { opacity: 0, y: -12, transition: { duration: 0.25, ease: [0.4, 0, 1, 1] as const } },
+    initial: { opacity: 0, y: 40, scale: 0.95, filter: 'blur(10px)' },
+    animate: { 
+        opacity: 1, 
+        y: 0, 
+        scale: 1, 
+        filter: 'blur(0px)',
+        transition: { 
+            type: 'spring', 
+            stiffness: 100, 
+            damping: 15, 
+            mass: 1,
+            staggerChildren: 0.1
+        } 
+    },
+    exit: { 
+        opacity: 0, 
+        y: -20, 
+        scale: 0.95, 
+        filter: 'blur(10px)',
+        transition: { duration: 0.3, ease: 'easeInOut' } 
+    },
 };
 
 const stagger: Variants = {
@@ -861,11 +879,16 @@ export function PageHeader({
     className?: string;
 }) {
     return (
-        <motion.div variants={pageTransition} className={cx('mb-10 flex flex-col gap-6 border-b border-[var(--line)] pb-10 xl:flex-row xl:items-end xl:justify-between', className)}>
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className={cx('mb-10 flex flex-col gap-6 border-b border-[var(--line)] pb-10 xl:flex-row xl:items-end xl:justify-between', className)}
+        >
             <div className="max-w-3xl">
                 {eyebrow ? <div className="eyebrow">{eyebrow}</div> : null}
                 <h1 className="page-title mt-4 text-balance">{title}</h1>
-                <p className="body-soft mt-4 text-base leading-8">{description}</p>
+                <p className="body-soft mt-4 text-base leading-8 text-[var(--text-soft)]">{description}</p>
             </div>
             {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
         </motion.div>
@@ -974,4 +997,13 @@ export function LoadingPanel({ title, description }: { title: string; descriptio
 export const motionVariants = {
     pageTransition,
     stagger,
+    fadeUp: {
+        initial: { opacity: 0, y: 40, scale: 0.9 },
+        animate: { 
+            opacity: 1, 
+            y: 0, 
+            scale: 1,
+            transition: { type: 'spring', stiffness: 100, damping: 15 } 
+        },
+    },
 };

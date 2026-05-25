@@ -42,6 +42,7 @@ import {
     SpotlightCard,
     StatCard,
     ToggleCard,
+    motionVariants,
 } from './components';
 import { useAppContext } from './context';
 import { quickActions, settingsLabels } from './data';
@@ -176,7 +177,7 @@ export function DashboardPage() {
     const greeting = greetingFor(language);
 
     return (
-        <div className="space-y-6">
+        <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate" exit="exit" className="space-y-6">
             <PageHeader
                 eyebrow="Inference Dashboard"
                 title={
@@ -354,9 +355,12 @@ export function DashboardPage() {
                         />
                         <div className="space-y-3">
                             {recent.length ? (
-                                recent.map((item) => (
-                                    <div
+                                recent.map((item, i) => (
+                                    <motion.div
                                         key={item.id}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ type: "spring", stiffness: 100, damping: 15, delay: i * 0.1 }}
                                         className="panel-soft rounded-2xl p-4 transition hover:border-[var(--primary)]/30"
                                     >
                                         <div className="flex items-start justify-between gap-4">
@@ -388,7 +392,7 @@ export function DashboardPage() {
                                             <Clock className="h-3.5 w-3.5" />
                                             <span>{formatDate(language, item.createdAt)}</span>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 ))
                             ) : (
                                 <p className="body-soft py-6 text-center text-sm">
@@ -401,7 +405,7 @@ export function DashboardPage() {
                     </SpotlightCard>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
@@ -461,7 +465,7 @@ export function HistoryPage() {
     ];
 
     return (
-        <div className="space-y-6">
+        <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate" exit="exit" className="space-y-6">
             <PageHeader
                 eyebrow="Inference History"
                 title={
@@ -558,9 +562,9 @@ export function HistoryPage() {
 
                                         return (
                                             <motion.button
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ delay: index * 0.02 }}
+                                                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                transition={{ type: "spring", stiffness: 100, damping: 15, delay: index * 0.05 }}
                                                 key={entry.id}
                                                 type="button"
                                                 onClick={() => {
@@ -678,7 +682,7 @@ export function HistoryPage() {
                     )}
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
@@ -709,7 +713,7 @@ export function SettingsPage() {
     ];
 
     return (
-        <div className="space-y-6">
+        <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate" exit="exit" className="space-y-6">
             <PageHeader
                 eyebrow="Settings"
                 title={
@@ -773,7 +777,7 @@ export function SettingsPage() {
                 </SpotlightCard>
 
             </div>
-        </div>
+        </motion.div>
     );
 }
 
@@ -806,8 +810,7 @@ export function AdminDashboardPage() {
     const total =
         boot.admin.metrics.users +
         boot.admin.metrics.videos +
-        boot.admin.metrics.processed +
-        boot.admin.metrics.failed;
+        boot.admin.metrics.processed;
 
     const log: { time: string; ar: string; en: string; tone: 'info' | 'success' | 'warning' | 'error' }[] = [
         {
@@ -831,7 +834,7 @@ export function AdminDashboardPage() {
     ];
 
     return (
-        <div className="space-y-6">
+        <motion.div variants={motionVariants.pageTransition} initial="initial" animate="animate" exit="exit" className="space-y-6">
             <PageHeader
                 eyebrow="Admin"
                 title={
@@ -852,7 +855,7 @@ export function AdminDashboardPage() {
                 }
             />
 
-            <div className="data-grid">
+            <div className="grid gap-6 md:grid-cols-3">
                 <StatCard
                     icon="users"
                     label={language === 'ar' ? 'المستخدمون' : 'Users'}
@@ -881,16 +884,6 @@ export function AdminDashboardPage() {
                         language === 'ar'
                             ? 'جلسات تمت معالجتها بنجاح.'
                             : 'Sessions successfully processed.'
-                    }
-                />
-                <StatCard
-                    icon="shield"
-                    label={language === 'ar' ? 'فشل' : 'Failed'}
-                    value={formatNumber(language, boot.admin.metrics.failed)}
-                    detail={
-                        language === 'ar'
-                            ? 'جلسات تحتاج إلى مراجعة أو إعادة تشغيل.'
-                            : 'Sessions that need review or retry.'
                     }
                 />
             </div>
@@ -1007,12 +1000,6 @@ export function AdminDashboardPage() {
                                 tone: 'success' as const,
                                 icon: <CheckCircle2 className="h-4 w-4" />,
                             },
-                            {
-                                label: language === 'ar' ? 'فشل' : 'Failed',
-                                value: boot.admin.metrics.failed,
-                                tone: 'error' as const,
-                                icon: <XCircle className="h-4 w-4" />,
-                            },
                         ].map((row) => (
                             <div key={row.label} className="panel-soft rounded-2xl p-4">
                                 <div className="flex items-center justify-between gap-3">
@@ -1032,6 +1019,6 @@ export function AdminDashboardPage() {
                     </div>
                 </SpotlightCard>
             </div>
-        </div>
+        </motion.div>
     );
 }
