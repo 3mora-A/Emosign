@@ -21,6 +21,23 @@
 
 ---
 
+## Project context
+
+This is the engineering side of **"End-to-End Deep Learning System for Sign Language and Emotion
+Classification"**, a graduation project at the Faculty of Information Technology and Artificial
+Intelligence, Palestine Technical University - Kadoorie. The project was selected under the
+**PalUROP Undergraduate Research Support Program** and awarded a research grant.
+
+Supervised by Dr. Hadi Khalilia, with co-supervision from Dr. Andrea Bontempelli
+(University of Trento, Italy). Team: Baraa Mohammad, Jenan Ruziqat, Amro Omair, Anas Maali.
+
+This repository holds the **emotion classification pipeline and the full-stack platform** built
+around it - the FastAPI inference service, the computer-vision preprocessing, the trained model
+artifacts, and the Laravel + React application. The sign-language recognition track is maintained
+separately and is not included here.
+
+---
+
 ## Results
 
 The committed model classifies five emotional states. These figures come from
